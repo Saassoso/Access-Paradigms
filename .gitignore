@@ -1,1 +1,4 @@
-Obsidian-Notes/
+Obsidian-Notes/*
+!Obsidian-Notes/Notes/
+!Obsidian-Notes/Notes/**
+.gitignore
