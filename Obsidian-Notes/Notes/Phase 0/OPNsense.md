@@ -18,7 +18,7 @@ On configure un Trunk 802.1Q (une seule interface) et on y tague les différents
 on chosis em0, l'interface WAN 
 - et N : pour refuser les LAGGs.
 - et N : Do you want to configure VLANs now?
-![](images/1-OPNsense.png)
+![](Phase%200/images/1-OPNsense.png)
 Assign interfaces : name
 - Trunk : Lan Segment ; em1 ;
 - Wan : NAT ; em0 ; 
@@ -36,7 +36,7 @@ Set interface IP address
 ### Access WebGUI
 Utiliser port forwarding over docker-host , ssh tunnel connection over terminus pour faire rebondir ton navigateur local :
 #### Configuration du Tunnel dans [[Termius]]
-- [[netplan]] : to configure the network of the docker host
+- [[Phase 0/netplan]] : to configure the network of the docker host
 - `root` et le mot de passe `opnsense`
 ### Assistant Initial
 - **Connexion :** Accède à `https://10.0.10.1`. 
@@ -60,7 +60,7 @@ Utiliser port forwarding over docker-host , ssh tunnel connection over terminus 
 - **Reload :** Applique les paramètres.
 ### VLANs
 #### Creation du Tag 802.1Q : 20
-![](images/2-OPNsense.png)
+![](Phase%200/images/2-OPNsense.png)
 **Devices** -> **VLAN** -> **+** 
 ##### Renseigne _exclusivement_ les champs
 - **Parent interface :** Sélectionne l'interface Trunk, c'est-à-dire **`em1`** (elle sera probablement affichée sous la forme `em1 (adresse_mac) [LAN]`). Ne sélectionne surtout pas le WAN (`em0`).
@@ -70,7 +70,7 @@ Utiliser port forwarding over docker-host , ssh tunnel connection over terminus 
 Then Click **Apply**
 ##### Assignation Logique (Couche L3)
 Interfaces > Assignments -> **New interface**. -> VLAN -> + -> OPTS
-![456](images/OPNsense.png)
+![456](Phase%200/images/OPNsense.png)
 ##### Configuration IP (Passerelle du VLAN)
 - Dans le menu de gauche, va dans **Interfaces** et clique sur **[VLAN20_Bureau]**.
 - **Enable :** Coche la case "Enable Interface" (sans cela, l'interface reste éteinte).
@@ -116,7 +116,7 @@ network:
 ##### Bouclier (Isolation du Management)
 `ping -c 4 10.0.10.2` (L'IP de ton Ubuntu Docker Host)
 	100% packet loss
-#### [[Network Namespaces]]
+#### [[Phase 0/Network Namespaces]]
 ### Configuration Firewall
 #### Règle d'Isolation
 **Firewall > Rules > [VLAN20_Bureau]**.

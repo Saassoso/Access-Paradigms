@@ -1,7 +1,7 @@
 **Zero-Trust Network Access (ZTNA)** architecture
 ### Core Architectural Pillars
-- **Identity-Centric Security:** Shifting from local/[[SAML]] accounts to a unified identity flow using **[[GCPW]] and **[[Authentik]]** as an [[OIDC]] broker to federate [[Google Cloud Identity]] and [[Microsoft Entra ID]].
-- **Layer 7 Perimeter:** Replacing pfSense with **[[OPNsense]] + [[Zenarmor]]** for application-level visibility, paired with **[[Cloudflare]] Tunnels** to eliminate inbound open ports.
+- **Identity-Centric Security:** Shifting from local/[[SAML]] accounts to a unified identity flow using **[[Phase 0/GCPW]] and **[[Phase 0/Authentik]]** as an [[OIDC]] broker to federate [[Google Cloud Identity]] and [[Microsoft Entra ID]].
+- **Layer 7 Perimeter:** Replacing pfSense with **[[Phase 0/OPNsense]] + [[Zenarmor]]** for application-level visibility, paired with **[[Phase 0/Cloudflare]] Tunnels** to eliminate inbound open ports.
 - **Automated Response:** Implementing event-driven workflows via **[[n8n]]** and **[[Wazuh]]** to achieve an automated "Hostile Offboarding" SLA of less than 5 seconds.
 - **Infrastructure as Code (IaC):** Standardizing deployment and configuration through **[[Terraform]]**, **[[Ansible]]**, and **[[Tactical RMM]]** to ensure "Zero-Touch" provisioning and CIS hardening.
 ### Le Flux de Télémétrie (XDR Multi-Cloud)
