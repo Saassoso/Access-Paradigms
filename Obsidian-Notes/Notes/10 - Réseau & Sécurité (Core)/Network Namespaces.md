@@ -63,6 +63,18 @@ sudo ip netns exec client_bureau ping -c 4 8.8.8.8
 ``` bash
 sudo ip netns exec client_bureau ping -c 4 10.0.10.2
 ```
+
+##### Validation du Filtrage (apres Pare-feu)
+1. **L'accès Internet (La règle PASS et le NAT)**
+``` bash
+sudo ip netns exec client_bureau ping -c 4 8.8.8.8
+```
+_(Résultat attendu : Les paquets reviennent. Le Bureau 1 a accès au monde extérieur)._
+**Test 2 : L'Isolation Zero Trust (La règle BLOCK) - LE TEST CRITIQUE**
+``` bash
+sudo ip netns exec client_bureau ping -c 4 10.0.10.2
+```
+
 ### Phase 4 : Nettoyage de l'Environnement de Test
 ``` bash
 sudo ip netns delete client_bureau

@@ -1,10 +1,8 @@
-OPNsense est plus ouvert aux automatisations modernes requises.
-
+- OPNsense est plus ouvert aux automatisations modernes requises.
 ### Topologie Hyperviseur (Couche 2)
 OPNsense aura exactement **DEUX** interfaces virtuelles dans VMware.
 - **WAN :** Connecté au réseau NAT.
 - **LAN :** Connecté à un LAN Segment unique. Ce lien agira comme un Trunk 802.1Q.
-
 ### Topologie Logique (Couche 3 - VLANs sur OPNsense)
 Sur cette interface LAN unique, on vas instancier des réseaux virtuels.
 
@@ -13,12 +11,11 @@ On configure un Trunk 802.1Q (une seule interface) et on y tague les différents
 	- Ce segment n'hébergera que ton infrastructure vitale (Interface OPNsense, IP de la VM Docker Host , IP de management de l'hyperviseur ). 
 - **VLAN Endpoints :** **(ID 20) :** `10.0.20.0/24` (DHCP: 100-199)
 	- Ce segment accueillera ta VM Windows 11 cible et les potentiels futurs postes clients. Un sous-réseau standard est ici pour allouer le pool DHCP.
-
 ### Configuration OPNsense 
 on chosis em0, l'interface WAN 
 - et N : pour refuser les LAGGs.
 - et N : Do you want to configure VLANs now?
-![](Phase%200/images/1-OPNsense.png)
+![](images/1-OPNsense.png)
 Assign interfaces : name
 - Trunk : Lan Segment ; em1 ;
 - Wan : NAT ; em0 ; 
@@ -35,11 +32,12 @@ Set interface IP address
 
 ### Access WebGUI
 Utiliser port forwarding over docker-host , ssh tunnel connection over terminus pour faire rebondir ton navigateur local :
-#### Configuration du Tunnel dans [[Termius]]
-- [[Phase 0/netplan]] : to configure the network of the docker host
+![](images/0-OPNsense.png)
+#### Configuration Reseau et du Tunnel dans [[Termius]]
+- [[netplan]] : to configure the network of the docker host
 - `root` et le mot de passe `opnsense`
 ### Assistant Initial
-- **Connexion :** Accède à `https://10.0.10.1`. 
+- **Connexion :** Accède à `https://127.0.0.1:8444`. 
 	- On Accepte l'avertissement de sécurité lié au certificat auto-signé.
 - **Identifiants :** Connecte-toi avec `root` et le mot de passe `opnsense`. 
 	- L'assistant de configuration initiale va se lancer automatiquement.
@@ -58,9 +56,10 @@ Utiliser port forwarding over docker-host , ssh tunnel connection over terminus 
 - **Optimize for Multiwan : DÉCOCHE cette case.** Ton pare-feu ne possède qu'une seule interface de sortie (le WAN NAT de VMware).
 - **Décoche "Automatic DHCP/DNS registration"** (c'est ce qui bloque ton clic).
 - **Reload :** Applique les paramètres.
+
 ### VLANs
 #### Creation du Tag 802.1Q : 20
-![](Phase%200/images/2-OPNsense.png)
+![](images/2-OPNsense.png)
 **Devices** -> **VLAN** -> **+** 
 ##### Renseigne _exclusivement_ les champs
 - **Parent interface :** Sélectionne l'interface Trunk, c'est-à-dire **`em1`** (elle sera probablement affichée sous la forme `em1 (adresse_mac) [LAN]`). Ne sélectionne surtout pas le WAN (`em0`).
@@ -70,7 +69,7 @@ Utiliser port forwarding over docker-host , ssh tunnel connection over terminus 
 Then Click **Apply**
 ##### Assignation Logique (Couche L3)
 Interfaces > Assignments -> **New interface**. -> VLAN -> + -> OPTS
-![456](Phase%200/images/OPNsense.png)
+![456](images/OPNsense.png)
 ##### Configuration IP (Passerelle du VLAN)
 - Dans le menu de gauche, va dans **Interfaces** et clique sur **[VLAN20_Bureau]**.
 - **Enable :** Coche la case "Enable Interface" (sans cela, l'interface reste éteinte).
@@ -116,7 +115,7 @@ network:
 ##### Bouclier (Isolation du Management)
 `ping -c 4 10.0.10.2` (L'IP de ton Ubuntu Docker Host)
 	100% packet loss
-#### [[Phase 0/Network Namespaces]]
+#### [[Network Namespaces]]
 ### Configuration Firewall
 #### Règle d'Isolation
 **Firewall > Rules > [VLAN20_Bureau]**.
@@ -137,13 +136,3 @@ network:
 - **Destination :**  `any` 
 - **Description :** `ISOLATION : Bloquer Bureau vers Management`
 #### Test Firewall
-##### Validation du Filtrage (Pare-feu)
-1. **L'accès Internet (La règle PASS et le NAT)**
-``` bash
-sudo ip netns exec client_bureau ping -c 4 8.8.8.8
-```
-_(Résultat attendu : Les paquets reviennent. Le Bureau 1 a accès au monde extérieur)._
-**Test 2 : L'Isolation Zero Trust (La règle BLOCK) - LE TEST CRITIQUE**
-``` bash
-sudo ip netns exec client_bureau ping -c 4 10.0.10.2
-```

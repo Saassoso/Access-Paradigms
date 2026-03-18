@@ -9,14 +9,4 @@
 		- **VLAN ID** = 20
 #### Validation 
 - cmd : `ipconfig`
-
-``` shell
-PS C:\Users\Windows> ipconfig
-Windows IP Configuration
-Ethernet adapter Ethernet1 2:
-   Connection-specific DNS Suffix  . : charif-labs.tech
-   Link-local IPv6 Address . . . . . : fe80::c245:c27d:d02a:5c70%9
-   IPv4 Address. . . . . . . . . . . : 10.0.20.100
-   Subnet Mask . . . . . . . . . . . : 255.255.255.0
-   Default Gateway . . . . . . . . . : 10.0.20.1
-```
+![](images/2026-03-09%2011_26_13-Windows%2011%20-%20VMware%20Workstation.png)
