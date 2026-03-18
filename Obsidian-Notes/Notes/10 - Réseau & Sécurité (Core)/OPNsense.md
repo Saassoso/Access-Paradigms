@@ -147,4 +147,3 @@ _(Résultat attendu : Les paquets reviennent. Le Bureau 1 a accès au monde ext�
 ``` bash
 sudo ip netns exec client_bureau ping -c 4 10.0.10.2
 ```
-
