@@ -1,0 +1,13 @@
+{
+	"nodes":[
+		{"id":"fce594d9292d5284","type":"text","text":". (root)","x":-80,"y":-240,"width":105,"height":60,"color":"5"},
+		{"id":"48ee0462b3b7e991","type":"text","text":".tech (TLD — géré par le registre .tech)","x":-195,"y":-140,"width":335,"height":60,"color":"6"},
+		{"id":"9a0b9d25440abb48","type":"file","file":"Notes/10 - Concepts/images/Cloudflare-3.png","x":-120,"y":80,"width":400,"height":83},
+		{"id":"91205db00221c3bf","type":"text","text":"charif-labs.tech (géré par... qui ?)","x":-170,"y":-40,"width":285,"height":60,"color":"#3e3394"}
+	],
+	"edges":[
+		{"id":"785f4810c4ed5de7","fromNode":"91205db00221c3bf","fromSide":"bottom","toNode":"9a0b9d25440abb48","toSide":"top","toEnd":"none"},
+		{"id":"94f3b6f06ed9c6d7","fromNode":"48ee0462b3b7e991","fromSide":"bottom","toNode":"91205db00221c3bf","toSide":"top"},
+		{"id":"7e6b90f34df23220","fromNode":"fce594d9292d5284","fromSide":"bottom","toNode":"48ee0462b3b7e991","toSide":"top"}
+	]
+}

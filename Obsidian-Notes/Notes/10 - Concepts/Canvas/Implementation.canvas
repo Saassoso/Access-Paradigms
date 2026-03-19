@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"d1a0d87854f9c6b4","x":-120,"y":-280,"width":241,"height":60,"type":"text","text":"Accès à Wazuh Dashboard"},
+		{"id":"690e786842223fca","x":-125,"y":-180,"width":250,"height":60,"type":"text","text":"Cloudflare Edge (vérifie TLS)"},
+		{"id":"a7f77dc71d0f1492","x":-154,"y":-80,"width":309,"height":60,"type":"text","text":"cloudflared daemon (tunnel sortant)"},
+		{"id":"cb0f13857e0fe4dc","x":-124,"y":20,"width":248,"height":80,"type":"text","text":"Cloudflare Access (vérifie : policy OIDC → Authentik)"},
+		{"id":"e29693ca35513046","x":-128,"y":140,"width":258,"height":99,"type":"text","text":"Wazuh Dashboard \n(accès accordé uniquement si tout est valide)"}
+	],
+	"edges":[
+		{"id":"118f5f96a2dbf441","fromNode":"d1a0d87854f9c6b4","fromSide":"bottom","toNode":"690e786842223fca","toSide":"top"},
+		{"id":"47b1c814bb7afcda","fromNode":"690e786842223fca","fromSide":"bottom","toNode":"a7f77dc71d0f1492","toSide":"top"},
+		{"id":"87262e17c76dce59","fromNode":"a7f77dc71d0f1492","fromSide":"bottom","toNode":"cb0f13857e0fe4dc","toSide":"top"},
+		{"id":"0e9515750c98ecf6","fromNode":"cb0f13857e0fe4dc","fromSide":"bottom","toNode":"e29693ca35513046","toSide":"top"}
+	]
+}

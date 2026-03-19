@@ -1,0 +1,29 @@
+{
+	"nodes":[
+		{"id":"8e723ff68746f500","x":-300,"y":-35,"width":618,"height":345,"type":"group","label":"APRÈS (ZTNA Tunnel) :"},
+		{"id":"dc516aeed4de4c5f","x":-280,"y":-280,"width":485,"height":190,"type":"group","label":"AVANT (port forwarding classique) :"},
+		{"id":"bd5718634fecbbe0","type":"text","text":"Serveur","x":193,"y":100,"width":105,"height":60},
+		{"id":"41215b9490605e3c","type":"text","text":"Internet","x":-280,"y":100,"width":105,"height":60},
+		{"id":"5e7c298d1bcb0718","type":"text","text":"Serveur","x":-280,"y":0,"width":105,"height":60},
+		{"id":"e433983a86424303","x":-122,"y":-15,"width":125,"height":90,"type":"text","text":"Connexion sortante"},
+		{"id":"bff54bdf2b6b0476","x":56,"y":0,"width":165,"height":60,"type":"text","text":"Cloudflare Edge"},
+		{"id":"117c254755819753","type":"text","text":"Cloudflare Edge","x":-147,"y":100,"width":165,"height":60},
+		{"id":"41f9cabe48f11df3","x":34,"y":100,"width":143,"height":60,"type":"text","text":"( via tunnel)"},
+		{"id":"08d69af4a09d2fb8","x":26,"y":200,"width":159,"height":90,"type":"text","text":"aucun port exposé sur le routeur"},
+		{"id":"02bec10397bd4bba","x":-260,"y":-260,"width":105,"height":60,"type":"text","text":"Internet"},
+		{"id":"2d48948e191a9247","x":-120,"y":-260,"width":165,"height":60,"type":"text","text":"Port 443 ouvert"},
+		{"id":"3b60f238b7237877","x":80,"y":-260,"width":105,"height":60,"type":"text","text":"Serveur"},
+		{"id":"dfa5c27b231f5d90","x":-152,"y":-160,"width":230,"height":50,"type":"text","text":"surface d'attaque directe"}
+	],
+	"edges":[
+		{"id":"a7f81ef93f144c22","fromNode":"02bec10397bd4bba","fromSide":"right","toNode":"2d48948e191a9247","toSide":"left"},
+		{"id":"24c3843ab561721e","fromNode":"2d48948e191a9247","fromSide":"right","toNode":"3b60f238b7237877","toSide":"left"},
+		{"id":"54a8b90011ab2db2","fromNode":"dfa5c27b231f5d90","fromSide":"top","toNode":"2d48948e191a9247","toSide":"bottom"},
+		{"id":"3242f3fb1bbd8aa4","fromNode":"5e7c298d1bcb0718","fromSide":"right","toNode":"e433983a86424303","toSide":"left"},
+		{"id":"efa6bd9af83ccabd","fromNode":"e433983a86424303","fromSide":"right","toNode":"bff54bdf2b6b0476","toSide":"left"},
+		{"id":"3e44a04669ce6726","fromNode":"41215b9490605e3c","fromSide":"right","toNode":"117c254755819753","toSide":"left"},
+		{"id":"20e42f7dae6c69c8","fromNode":"117c254755819753","fromSide":"right","toNode":"41f9cabe48f11df3","toSide":"left"},
+		{"id":"7be923d1ecb08d13","fromNode":"41f9cabe48f11df3","fromSide":"right","toNode":"bd5718634fecbbe0","toSide":"left"},
+		{"id":"a34f517c012b4d29","fromNode":"08d69af4a09d2fb8","fromSide":"top","toNode":"41f9cabe48f11df3","toSide":"bottom"}
+	]
+}
