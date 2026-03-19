@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"0aa3d391ba9c0f75","x":-360,"y":-170,"width":610,"height":320,"type":"group","label":"OPNsense"},
+		{"id":"56e00962cfbb2c5e","x":-160,"y":-320,"width":210,"height":60,"color":"6","type":"text","text":"       Internet"},
+		{"id":"f487bc1c7a96460e","x":-117,"y":-150,"width":125,"height":60,"color":"5","type":"text","text":"OPNsense"},
+		{"id":"7caecd29d1aeb758","x":-127,"y":-240,"width":145,"height":60,"type":"text","text":"VMware NAt "},
+		{"id":"614f2e4ca8fb3fc8","x":-156,"y":-60,"width":203,"height":60,"type":"text","text":"Trunk 802.1Q (em1)"},
+		{"id":"399bc960942cd7df","x":-340,"y":40,"width":250,"height":90,"type":"text","text":"VLAN 30 — Management\n10.0.30.0/29\nDocker Host : 10.0.30.2"},
+		{"id":"b719aaf250ae7aec","x":-20,"y":37,"width":250,"height":93,"type":"text","text":"VLAN 20 — Management\n10.0.20.0/24\nDHCP : .100-.199"}
+	],
+	"edges":[
+		{"id":"3f1379745167aee5","fromNode":"56e00962cfbb2c5e","fromSide":"bottom","toNode":"7caecd29d1aeb758","toSide":"top","toEnd":"none"},
+		{"id":"f7cabb6342c0d335","fromNode":"7caecd29d1aeb758","fromSide":"bottom","toNode":"f487bc1c7a96460e","toSide":"top","toEnd":"none"},
+		{"id":"cb65ecef06725ab0","fromNode":"f487bc1c7a96460e","fromSide":"bottom","toNode":"614f2e4ca8fb3fc8","toSide":"top","toEnd":"none"},
+		{"id":"b8b7a6578689b4cf","fromNode":"614f2e4ca8fb3fc8","fromSide":"bottom","toNode":"399bc960942cd7df","toSide":"top"},
+		{"id":"14f76400b11a0f6f","fromNode":"614f2e4ca8fb3fc8","fromSide":"bottom","toNode":"b719aaf250ae7aec","toSide":"top"}
+	]
+}

@@ -38,27 +38,43 @@
 	- [ ] Authentik : Création de la source fédérée "Entra ID". 
 	- [ ] Test : Login réussi sur `auth.charif-labs.tech` avec un compte `@ms.charif-labs.tech`. 
 	- [ ] **Fédération OIDC (Google)** : Création et mapping des attributs OIDC pour le tenant `gcpw`.
+- [ ] Cloudflare Tunnel + 4 CNAME records — voir [[Phase 0 - DNS et Cloudflare Setup]]
+- [ ] [[Authentik]] déployé sur auth.charif-labs.tech
+- [ ] App Registration Entra ID (Client ID + Secret + Redirect URI) — voir [[Phase 1 - Fédération OIDC Entra]]
+- [ ] Source fédérée OIDC Entra dans Authentik
+- [ ] Test login @ms.charif-labs.tech sur auth.charif-labs.tech
+- [ ] OUs + 3 utilisateurs de test dans Authentik
+- [ ] Cloudflare Access configuré (policies OIDC sur chaque domaine)
+## 💻 Phase 2 : Endpoints Windows (Déploiement) (Semaines 9-12)
+*Contrôler la flotte matérielle et lier les sessions Windows au Cloud.
 
-## 💻 Phase 2 : Endpoints Windows (Déploiement)
-*Contrôler la flotte matérielle et lier les sessions Windows au Cloud.*
+- [ ] Login @ms.charif-labs.tech via Authentik fonctionne
+- [ ] Cloudflare Access policy active sur au moins 1 domaine
 
-- [ ] **Configuration Ansible** : Création de `inventory.ini` et du Vault pour les mots de passe administrateurs locaux.
-- [ ] **Connectivité WinRM** : Déploiement sécurisé pour piloter les VMs VLAN 20.
-- [ ] **Intégration GCPW** : Lancement des Playbooks Ansible pour déployer l'agent Google Credential Provider for Windows et forcer le login Cloud au démarrage de l'OS.
-
-## 👁️ Phase 3 : Visibilité SIEM / XDR (Détection)
+Voir [[Phase 2 - Onboarding Windows]] :
+- [ ] Script bootstrap.ps1 testé sur VM vierge
+- [ ] Compte Action1 créé + DPA signé
+- [ ] Groupe Onboarding Action1 configuré (scripts automatiques)
+- [ ] Ansible inventory.ini + win_ping OK
+## 👁️ Phase 3 : Visibilité SIEM / XDR (Détection) (Semaines 13-17) 
 *Surveiller activement la mémoire locale et les requêtes Cloud.*
 
-- [ ] **Déploiement Wazuh** : Installation du Manager et du Dashboard sur le Docker Host.
-- [ ] **Wazuh Agents** : Déploiement automatisé via Ansible sur les postes Windows.
-- [ ] **Hardening Sysmon** : Configuration XML pour remonter les *Event IDs 1 (Process), 3 (Net) et 10 (LSASS memory access)*.
+- [ ] Wazuh Manager déployé (avec cap OpenSearch 1 Go)
+- [ ] Agent Wazuh + Sysmon sur VM Windows
+- [ ] Events 1/3/10 visibles dans Wazuh
+- [ ] Score SCA CIS ≥ 85%
 - [ ] **Connecteurs Cloud** : Intégration MS Graph API et Google Admin SDK à Wazuh pour centraliser les logs d'audit.
 
-## ⚡ Phase 4 : SOAR & Remédiation (Event-Driven)
+## ⚡ Phase 4 : SOAR & Remédiation (Event-Driven) (Semaines 18-21)
 *Éliminer les délais de réaction humains. Atteindre le SLA < 5 secondes.*
 
-- [ ] **Déploiement n8n** : Installation sur le Docker Host et configuration des Ingress Rules Cloudflare pour les Webhooks entrants.
-- [ ] **Déploiement Tactical RMM** : Déploiement du serveur et des agents locaux pour l'exécution asynchrone.
-- [ ] **Validation HMAC** : Implémentation de la vérification cryptographique SHA256 sur chaque appel Webhook dans n8n.
-- [ ] **Runbook 1 (Hostile Offboarding)** : Création du workflow n8n (Révocation SSO + Reset Passwords + Isolation réseau Tactical RMM) déclenché par JSON payload.
-- [ ] **Runbook 2 (XDR Response)** : Création de la règle Wazuh qui déclenche un Webhook n8n dès la détection de *Credential Dumping* (Sysmon 10) pour couper l'interface réseau via l'API RMM.
+- [ ] n8n déployé + webhooks HMAC
+- [ ] Workflow offboarding hostile (SLA < 5s)
+- [ ] Workflow XDR → isolation Action1
+- [ ] BitLocker via Ansible (clé escrowée dans Entra)
+
+## ❌ Phase 5 — Observabilité (Semaines 22-26)
+
+- [ ] WireGuard mesh + Prometheus scraping
+- [ ] Dashboards Grafana avec données réelles
+- [ ] Test DR complet < 4 heures
