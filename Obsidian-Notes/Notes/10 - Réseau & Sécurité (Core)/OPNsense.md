@@ -89,6 +89,8 @@ Le pare-feu possède l'adresse `10.0.20.1` sur ce réseau, il peut distribuer de
 - Dans l'onglet **Options** (toujours dans la création du Subnet) :
     - Cherche le code `3` (Routers) et mets `10.0.20.1`.
     - Cherche le code `6` (Domain Name Servers) et mets `1.1.1.1`.
+### Routage dans pc 
+![](images/OPNsense-1.png)
 #### Test Vlans
 ##### Tagging 802.1Q (Dans l'OS Client)
 - `ip a` (ex: `ens33`).

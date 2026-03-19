@@ -4,7 +4,7 @@
 
 Access Admin Interface
 ![](images/Authentik-2.png)
-- Create Roles  : 
+- Create Roles with permissions :
 
 | Nom       | Parent    | Rôle                  |
 | --------- | --------- | --------------------- |
@@ -13,5 +13,13 @@ Access Admin Interface
 | `Bureau2` | _(aucun)_ | OU racine Bureau 2    |
 | `Admins`  | `Bureau2` | Administrateurs       |
 ![](images/Authentik-1.png)
-- Create Groups :
+- Create Groups with Roles : 
+![](images/Authentik-3.png)
+- Create Users and put them in a folder :
+![](images/Authentik-4.png)
+- Assign user to Groups :
+![](images/Authentik-5.png)
+
+#### Test Login
+![](images/Authentik-6.png)
 
