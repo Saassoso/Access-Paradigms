@@ -19,7 +19,6 @@ Plugin pour [[OPNsense]] qui transforme le firewall stateful L4 en **Next-Genera
 | Voit l'IP et le port | Voit l'application et la catégorie |
 | Pas de DPI | Deep Packet Inspection |
 | Pas de filtrage DNS | Filtrage par domaine/catégorie |
-
 ## Installation
 
 System → Firmware → Plugins → chercher `os-sunnyvalley` → Install
