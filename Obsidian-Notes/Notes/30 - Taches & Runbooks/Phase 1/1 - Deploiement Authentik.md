@@ -55,7 +55,26 @@ Authentik → Directory → Users → Create (3 utilisateurs)
 - `user-basic-01` → groupe basique
 - `user-admin-01` → groupe admins
 - `breakglass` → groupe admins (compte d'urgence)
-
+// 
+- Create Roles 
+Admins	
+Bureau 1	
+Bureau 2	
+OU	
+Standard User	
+root	
+- Unités Organisationnelles (Folders)
+Dossier : `Bureau1`
+Dossier : `Bureau2`
+le troisien deja exsitant `authentik admins` 
+- Groupes
+Groupe : `basique` (Rattaché à l'OU `Bureau1`)
+Groupe : `admins` (Rattaché à l'OU `Bureau2`)
+- Utilisateurs (Identités)
+user-basic-01 : GP= `basique`, Dir= Bureau1,, Rules= 
+user-admin-01 : GP= `admins`, Dir=Bureau2 , Rules= 
+breakglass : GP= `admins`, Dir=Bureau2 , Rules= 
+akadmin : GP= authentik Admins, Dir= users , Roles= 
 ## Prochaines étapes (Phase 1 en cours)
 
 - [ ] Configurer Provider OIDC pour Cloudflare Access — voir [[2 - Federation OIDC Entra ID]]
