@@ -39,11 +39,11 @@ Pour que la fédération fonctionne, chaque partie doit avoir importé le metada
 ## Attribute mapping
 L'IdP envoie des attributs dans l'assertion. Le SP doit les mapper sur ses propres champs :
 
-| Authentik claim | Entra ID attribute |
-|---|---|
-| `email` | `user.mail` |
+| Authentik claim      | Entra ID attribute       |
+| -------------------- | ------------------------ |
+| `email`              | `user.mail`              |
 | `preferred_username` | `user.userprincipalname` |
-| `groups` | rôles ou groupes Entra |
+| `groups`             | rôles ou groupes Entra   |
 ## Debugger la fédération
 **SAML Tracer** (extension Firefox/Chrome) — capture les échanges SAML en temps réel. 
 Indispensable pour identifier les erreurs de configuration (mauvais Entity ID, ACS URL incorrecte, assertion expirée, signature invalide).
