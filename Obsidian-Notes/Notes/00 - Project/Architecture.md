@@ -7,7 +7,7 @@ statut: actif
 
 | Couche            | Outil                       | Rôle                                    |
 | ----------------- | --------------------------- | --------------------------------------- |
-| Firewall L3/L7    | [[../../OPNsense]] + [[../../Zenarmor]] | Périmètre réseau, VLANs, NGFW           |
+| Firewall L3/L7    | [[../20 - Outils/OPNsense 1]] + [[../../Zenarmor]] | Périmètre réseau, VLANs, NGFW           |
 | ZTNA Ingress      | [[../20 - Outils/Cloudflare]] Tunnel       | Exposition sans port ouvert             |
 | IaC Control Plane | [[../../Terraform]]               | Tunnel + DNS Cloudflare                 |
 | IdP central       | [[../20 - Outils/Authentik]]               | SSO, MFA, OIDC, SAML                    |

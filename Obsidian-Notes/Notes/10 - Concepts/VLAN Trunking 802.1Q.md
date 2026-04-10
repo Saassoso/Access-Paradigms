@@ -30,7 +30,7 @@ Les VLANs sont isolés au niveau L2. Pour qu'ils communiquent, il faut du routag
 
 ## Dans ce projet
 
-Une seule interface physique `em1` sur [[../../OPNsense]] porte deux sous-interfaces VLAN :
+Une seule interface physique `em1` sur [[../20 - Outils/OPNsense 1]] porte deux sous-interfaces VLAN :
 
 | VLAN       | ID 802.1Q | Réseau IP      | Rôle                         |
 | ---------- | --------- | -------------- | ---------------------------- |

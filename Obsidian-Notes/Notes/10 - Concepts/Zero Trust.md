@@ -21,7 +21,7 @@ Modèle de sécurité qui abandonne le paradigme "faire confiance au réseau int
 
 1. **Identity** — [[../20 - Outils/Authentik]] + [[Entra ID]] + Cloudflare Access
 2. **Device** — [[Action1]] + [[Wazuh]] SCA + Sysmon
-3. **Network** — [[../../OPNsense]] VLANs + [[Zero Trust Tunnel]]
+3. **Network** — [[../20 - Outils/OPNsense 1]] VLANs + [[Zero Trust Tunnel]]
 4. **Application** — Cloudflare Access (edge) + Authentik Outpost (interne)
 5. **Data** — LUKS chiffrement volume, Ansible Vault, backups chiffrés
 

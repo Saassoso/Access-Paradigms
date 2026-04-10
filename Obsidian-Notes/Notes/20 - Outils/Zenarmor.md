@@ -9,7 +9,7 @@ parent: [[OPNsense]]
 ---
 ## Rôle
 
-Plugin pour [[OPNsense]] qui transforme le firewall stateful L4 en **Next-Generation Firewall** capable d'inspecter le trafic au niveau applicatif (Layer 7).
+Plugin pour [[OPNsense 1]] qui transforme le firewall stateful L4 en **Next-Generation Firewall** capable d'inspecter le trafic au niveau applicatif (Layer 7).
 
 ## Ce qu'il ajoute
 
