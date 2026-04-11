@@ -33,17 +33,17 @@
 - [x] **Cloudflare Tunnels (Code)** : Définition des UUID et des CNAME proxifiés dans `main.tf`.
 - [x] **Hygiène Docker** :  Seuls `authentik` et `cloudflared` tournent.
 - [x] **Conteneurs ZTNA** : Stack `docker-compose.yml` déployée. Aucun port n'est exposé (`0.0.0.0` banni). Cloudflared résout le DNS interne Docker.
-- [ ] **Fédération OIDC (Entra ID)** : 
-	- [ ] Microsoft : Création de l'App Registration (Client ID, Secret, Redirect URI). 
-	- [ ] Authentik : Création de la source fédérée "Entra ID". 
-	- [ ] Test : Login réussi sur `auth.charif-labs.tech` avec un compte `@ms.charif-labs.tech`. 
-	- [ ] **Fédération OIDC (Google)** : Création et mapping des attributs OIDC pour le tenant `gcpw`.
-- [ ] Cloudflare Tunnel + 4 CNAME records — voir [[Phase 0 - DNS et Cloudflare Setup]]
-- [ ] [[../20 - Outils/Authentik]] déployé sur auth.charif-labs.tech
-- [ ] App Registration Entra ID (Client ID + Secret + Redirect URI) — voir [[Phase 1 - Fédération OIDC Entra]]
-- [ ] Source fédérée OIDC Entra dans Authentik
-- [ ] Test login @ms.charif-labs.tech sur auth.charif-labs.tech
-- [ ] OUs + 3 utilisateurs de test dans Authentik
+- [x] **Fédération OIDC (Entra ID)** : 
+	- [x] Microsoft : Création de l'App Registration (Client ID, Secret, Redirect URI). 
+	- [x] Authentik : Création de la source fédérée "Entra ID". 
+	- [x] Test : Login réussi sur `auth.charif-labs.tech` avec un compte `@ms.charif-labs.tech`. 
+	- [x] **Fédération OIDC (Google)** : Création et mapping des attributs OIDC pour le tenant `gcpw`.
+- [x] Cloudflare Tunnel + 4 CNAME records — voir [[Phase 0 - DNS et Cloudflare Setup]]
+- [x] [[../20 - Outils/Authentik]] déployé sur auth.charif-labs.tech
+- [x] App Registration Entra ID (Client ID + Secret + Redirect URI) — voir [[Phase 1 - Fédération OIDC Entra]]
+- [x] Source fédérée OIDC Entra dans Authentik
+- [x] Test login @ms.charif-labs.tech sur auth.charif-labs.tech
+- [x] OUs + 3 utilisateurs de test dans Authentik
 - [ ] Cloudflare Access configuré (policies OIDC sur chaque domaine)
 ## Phase 2 : Endpoints Windows (Déploiement) (Semaines 9-12)
 *Contrôler la flotte matérielle et lier les sessions Windows au Cloud.
