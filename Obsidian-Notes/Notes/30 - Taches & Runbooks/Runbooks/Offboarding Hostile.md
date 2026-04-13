@@ -1,75 +1,134 @@
 ---
-
 tags: [runbook, sécurité, offboarding, soar]
+outils: [Keycloak, Action1, n8n, Wazuh]
+SLA_réel: 15-90 secondes (mesuré, pas théorique)
+---
+# Runbook — Offboarding Hostile
 
-outils: [Authentik, Action1, n8n, Wazuh]
-
-SLA: < 5 secondes (via n8n automatisé)
+> ⚠️ **Ordre critique :** LAPS rotation AVANT la coupure NIC. Ne jamais inverser.
 
 ---
-## Déclencheur
+## SLA Réaliste
 
-Confirmation RH qu'un employé quitte / licenciement immédiat.
+| Étape | SLA Attendu |
+|---|---|
+| Révocation session Keycloak | < 1 seconde |
+| Suspension compte satellite | 3-15 secondes (latence API cloud) |
+| Rotation LAPS (Action1) | 5-30 secondes (dépend agent) |
+| Coupure NIC (Action1) | 5-30 secondes (dépend agent) |
+| **Total end-to-end** | **15-90 secondes (P95)** |
 
-## Mode automatisé (n8n — SLA < 5s)
+> Le SLA < 5 secondes s'applique uniquement à la **révocation SSO Keycloak**. Les actions endpoint dépendent de la connectivité de l'agent Action1.
 
-Envoyer le payload JSON au webhook n8n :
+---
+## Mode Automatisé (n8n — nominal)
+### Déclencher l'offboarding
 
 ```bash
-curl -X POST https://n8n.charif-labs.tech/webhook/offboarding   -H "Content-Type: application/json"   -H "X-Signature: $(echo -n '{...}' | openssl dgst -sha256 -hmac $HMAC_SECRET)"   -d '{
-    "employee_id": "user-basic-01",
-    "device_hostname": "BUR1-PC-01",
-    "reason": "termination",
-    "timestamp": "2026-03-19T10:00:00Z"
-  }'
+# Via curl (admin IT)
+TIMESTAMP=$(date +%s)
+PAYLOAD='{"user_id":"user-basic-01","reason":"termination"}'
+SIGNATURE=$(echo -n "${PAYLOAD}${TIMESTAMP}" | openssl dgst -sha256 -hmac "$HMAC_SECRET" -hex | cut -d' ' -f2)
+
+curl -X POST https://n8n.charif-labs.tech/webhook/offboarding \
+  -H "Content-Type: application/json" \
+  -H "X-Signature: $SIGNATURE" \
+  -H "X-Timestamp: $TIMESTAMP" \
+  -d "$PAYLOAD"
 ```
 
-Le workflow n8n exécute automatiquement les 4 étapes.
+### Suivi dans n8n
+n8n → Executions → chercher le workflow `offboarding-hostile` → vérifier chaque étape.
 
-## Mode manuel (si n8n indisponible)
+---
 
-### Étape 1 — Suspendre le compte Authentik (IMMÉDIAT)
+## Mode Manuel (si n8n indisponible)
 
-Authentik Admin → Directory → Users → [Employé] → Deactivate  
-Effet : Login Windows bloqué. SSO révoqué sur tous les services simultanément.
+Exécuter dans l'**ordre strict** suivant :
 
-### Étape 2 — Rotation LAPS (Action1)
+### Étape 1 — Désactiver dans Keycloak (IMMÉDIAT)
 
-Action1 → Endpoints → [Device] → Run Script → `Rotate-LAPS-Now.ps1`
+```
+Keycloak → charif-labs realm → Users → [Employé] → Deactivate
+```
+
+Effet immédiat : session SSO révoquée sur tous les services. Login Portainer/Wazuh/etc. bloqué.
+
+### Étape 2 — Suspendre le satellite (selon profil)
+
+**Bureau-1 (Google) :**
+```
+Google Admin Console → Users → [Employé] → Suspend User
+```
+
+**Bureau-2 (Microsoft) :**
+```
+Entra Admin → Users → [Employé] → Block sign in
++ Entra → [Employé] → Revoke sessions
+```
+
+### Étape 3 — Rotation LAPS (⚠️ AVANT le NIC)
+
+```
+Action1 → Endpoints → [Device] → Run Script → Rotate-LAPS.ps1
+Attendre la confirmation du job avant de passer à l'étape 4.
+```
 
 ```powershell
-# Rotate-LAPS-Now.ps1
-$newPass = [System.Web.Security.Membership]::GeneratePassword(20, 4)
+# Rotate-LAPS.ps1
+$newPass = -join ((65..90) + (97..122) + (48..57) | Get-Random -Count 24 | ForEach-Object {[char]$_})
 $admin = [adsi]"WinNT://$env:COMPUTERNAME/Administrator"
 $admin.SetPassword($newPass)
 $admin.SetInfo()
+Write-Output "LAPS_OK"
 ```
 
-### Étape 3 — Isoler le device (Action1)
+### Étape 4 — Isoler le device (réseau coupé)
 
-Action1 → Endpoints → [Device] → Run Script
+```
+Action1 → Endpoints → [Device] → Run Script → Isolate-Endpoint.ps1
+```
 
 ```powershell
 # Isolate-Endpoint.ps1
 Disable-NetAdapter -Name "*" -Confirm:$false
+Write-Output "ISOLATED"
 ```
 
-### Étape 4 — Révoquer les tokens n8n
+> Après cette commande, l'agent Action1 et Wazuh seront inaccessibles. C'est normal.
 
-n8n → Settings → Credentials → supprimer tokens liés à l'employé.
+### Étape 5 — Vérification post-offboarding
 
-### Étape 5 — Vérification
+```
+Wazuh Dashboard → Events → hostname: [Device]
+→ Confirmer : aucun event de login APRÈS le timestamp de désactivation
+```
 
-Wazuh Dashboard → Events → filtrer par hostname [Device]  
-Confirmer : aucun événement login après le timestamp de suspension.
+---
 
-## Documentation post-offboarding
+## Documentation Obligatoire
 
 | Champ | Valeur |
 |---|---|
-| Employé | [nom] |
-| Timestamp suspension Authentik | [datetime] |
-| Timestamp rotation LAPS | [datetime] |
-| Timestamp isolation device | [datetime] |
+| Employé | |
+| Profil (Google/Microsoft) | |
+| Timestamp désactivation Keycloak | |
+| Timestamp suspension satellite | |
+| Timestamp rotation LAPS | |
+| Timestamp coupure NIC | |
+| SLA total mesuré | secondes |
 | Vérification Wazuh | ✅ / ❌ |
-| Exécuté par | [admin] |
+| Exécuté par | |
+
+---
+
+## Comptes Break-Glass — Usage d'Urgence Uniquement
+
+Si Keycloak est hors service ET qu'un offboarding urgent est nécessaire :
+
+1. Accès au pli scellé break-glass
+2. Connexion directe à Google Admin Console avec compte admin Google natif
+3. Connexion directe à Entra Admin avec `breakglass@*.onmicrosoft.com`
+4. Effectuer manuellement les étapes 2, 3, 4 ci-dessus
+5. Documenter l'accès break-glass dans le registre des incidents
+6. Changer le mot de passe break-glass après utilisation
