@@ -31,23 +31,33 @@ Keycloak Admin → `charif-labs` realm → Groups :
 | `bureau-2-it` | Admins IT | 20 | Microsoft-Only |
 | `bureau-2-dev` | Développeurs | 20 | Microsoft-Only |
 | `bureau-2-compta` | Comptabilité | 20 | Microsoft-Only |
-
+![](images/Phase-1-Identity-Keycloak.png)
 ### Rôles associés aux groupes
 
 Keycloak → Realm roles → créer puis assigner via Groups → Role Mappings :
 
 ```
 basic-user  → bureau-1
+```
+![](images/Phase-1-Identity-Keycloak-1.png)
+```
 it-admin    → bureau-2-it
+```
+![](images/Phase-1-Identity-Keycloak-2.png)
+```
 dev         → bureau-2-dev
+```
+![](images/Phase-1-Identity-Keycloak-3.png)
+```
 compta      → bureau-2-compta
 ```
-
+![](images/Phase-1-Identity-Keycloak-4.png)
 ### MFA TOTP obligatoire pour les admins
 
 Keycloak → Authentication → Required Actions → Configure OTP → Default Action : ON
+![](images/Phase-1-Identity-Keycloak-5.png)
 
-Pour forcer uniquement sur certains groupes :
+- Pour forcer uniquement sur certains groupes :
 ```
 Keycloak → Authentication → Policies → Conditional OTP Policy
   Condition user role : it-admin, dev
@@ -55,7 +65,6 @@ Keycloak → Authentication → Policies → Conditional OTP Policy
 ```
 
 ---
-
 ## 1.2 — Cloudflare Access sur tous les services
 
 ### Créer le Client OIDC Keycloak pour Cloudflare
@@ -65,12 +74,14 @@ Keycloak → Clients → Create client
 ```
 Client ID   : cloudflare-access
 Client type : OpenID Connect
+Name : Cloudflare Access
+Valid redirect URIs : https://charif-labs.cloudflareaccess.com/cdn-cgi/access/callback
+
 Client auth : ON (confidential)
-Valid redirect URIs : https://<team>.cloudflareaccess.com/cdn-cgi/access/callback
 ```
 
-Onglet **Client scopes** → `cloudflare-access-dedicated` → Add mapper → Group Membership :
-
+Onglet **Client scopes** → `cloudflare-access-dedicated` → Add mapper → Groups :
+![](images/Phase-1-Identity-Keycloak-6.png)
 ```
 Name            : groups
 Token Claim Name: groups
@@ -79,7 +90,7 @@ Add to userinfo : ON
 ```
 
 Copier le `Client Secret` depuis l'onglet **Credentials**.
-
+![](images/Phase-1-Identity-Keycloak-7.png)
 ### Dans Cloudflare Zero Trust Dashboard
 
 Settings → Authentication → Add Provider → OpenID Connect
@@ -94,12 +105,12 @@ JWKS URL     : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-
 ```
 ### Policies Access par service
 
-| Service | Domaine | Groupe requis |
-|---|---|---|
-| Keycloak Admin | auth.charif-labs.tech | bureau-2-it |
-| Wazuh | wazuh.charif-labs.tech | bureau-2-it |
-| n8n | n8n.charif-labs.tech | bureau-2-it |
-| Portainer | portainer.charif-labs.tech | bureau-2-it |
+| Service        | Domaine                    | Groupe requis |
+| -------------- | -------------------------- | ------------- |
+| Keycloak Admin | auth.charif-labs.tech      | bureau-2-it   |
+| Wazuh          | wazuh.charif-labs.tech     | bureau-2-it   |
+| n8n            | n8n.charif-labs.tech       | bureau-2-it   |
+| Portainer      | portainer.charif-labs.tech | bureau-2-it   |
 
 ---
 ## 1.3 — Portainer
