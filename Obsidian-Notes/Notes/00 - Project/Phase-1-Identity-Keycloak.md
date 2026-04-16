@@ -93,8 +93,9 @@ Copier le `Client Secret` depuis l'onglet **Credentials**.
 ![](images/Phase-1-Identity-Keycloak-7.png)
 ### Dans Cloudflare Zero Trust Dashboard
 
-Settings → Authentication → Add Provider → OpenID Connect
-
+Access in terraform 
+- add zero trust to api key {Account > Zero Trust > Edit}
+- [[Notes - to Remember]]
 ```
 Name         : Keycloak
 Client ID    : cloudflare-access
@@ -104,6 +105,7 @@ Token URL    : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-
 JWKS URL     : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/certs
 ```
 ### Policies Access par service
+![](images/Phase-1-Identity-Keycloak-8.png)
 
 | Service        | Domaine                    | Groupe requis |
 | -------------- | -------------------------- | ------------- |
@@ -153,23 +155,23 @@ Redirect URL     : https://portainer.charif-labs.tech/
 Logout URL       : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/logout
 Scopes           : openid email profile groups
 ```
-
+![](images/Phase-1-Identity-Keycloak-9.png)
 ### Cloudflare Tunnel → Portainer
 
 ```hcl
 # ingress.tf
 ingress_rule {
-  hostname = "portainer.charif-labs.tech"
+  hostname = "mgmt.charif-labs.tech"
   service  = "http://portainer:9000"
 }
 ```
 
 ```bash
 terraform apply
-curl -I https://portainer.charif-labs.tech
+curl -I https://mgmt.charif-labs.tech
 # Attendu : 302 → Cloudflare Access
 ```
-
+![](images/Phase-1-Identity-Keycloak-10.png)
 ---
 
 ## 1.4 — Identity Provider Microsoft (bouton "Se connecter avec Microsoft")
