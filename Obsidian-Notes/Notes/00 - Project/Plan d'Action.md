@@ -45,10 +45,10 @@ version: 3.2
 - [ ] Test bout-en-bout : login Keycloak → accès Portainer
 
 ### 1.3 — Portainer (premier service interne protégé)
-- [ ] Déployer Portainer CE sur Docker Host
-- [ ] Configurer OIDC SSO avec Keycloak (`portainer-sso` client)
-- [ ] Cloudflare Tunnel → `portainer.charif-labs.tech`
-- [ ] Test : login via Keycloak → Portainer ouvert
+- [x] Déployer Portainer CE sur Docker Host
+- [x] Configurer OIDC SSO avec Keycloak (`portainer-sso` client)
+- [x] Cloudflare Tunnel → `portainer.charif-labs.tech`
+- [x] Test : login via Keycloak → Portainer ouvert
 
 **Gatekeeper :** Se connecter sur `portainer.charif-labs.tech` avec un compte Keycloak. Aucun accès sans authentification.
 
