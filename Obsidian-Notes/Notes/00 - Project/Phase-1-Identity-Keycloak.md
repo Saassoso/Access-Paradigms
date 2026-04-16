@@ -152,7 +152,7 @@ Authorization URL: https://auth.charif-labs.tech/realms/charif-labs/protocol/ope
 Access Token URL : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/token
 Resource URL     : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/userinfo
 Redirect URL     : https://portainer.charif-labs.tech/
-Logout URL       : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/logout
+Logout URL       : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/logout?client_id=portainer-sso&post_logout_redirect_uri=https://mgmt.charif-labs.tech
 Scopes           : openid email profile groups
 ```
 ![](images/Phase-1-Identity-Keycloak-9.png)
@@ -176,9 +176,9 @@ curl -I https://mgmt.charif-labs.tech
 
 ## 1.4 — Identity Provider Microsoft (bouton "Se connecter avec Microsoft")
 
-> Permet aux utilisateurs Bureau-2 de se connecter à Keycloak avec leur compte `@ms.charif-labs.tech`.
-
+> Permettre aux utilisateurs (ex: Bureau-2) de s'authentifier sur Keycloak en utilisant directement leur compte Microsoft Entra ID (ex: `utilisateur@ms.charif-labs.tech`). Keycloak délègue l'authentification à Microsoft via le protocole OpenID Connect (OIDC).
 ### App Registration Entra ID
+Permet de déclarer Keycloak comme une application autorisée à demander des authentifications à Microsoft.
 
 1. Entra Admin → App Registrations → New Registration
 2. Nom : `keycloak-idp-microsoft`
@@ -186,27 +186,74 @@ curl -I https://mgmt.charif-labs.tech
 4. Copier Application (client) ID + générer Client Secret
 
 ### Identity Provider dans Keycloak
+Indique à Keycloak comment contacter l'application Entra ID fraîchement créée.
 
-Keycloak → `charif-labs` realm → Identity Providers → Add provider → Microsoft
-
+1. Keycloak → `charif-labs` realm → Identity Providers → Add provider → Microsoft
 ```
 Alias        : microsoft
 Display Name : Se connecter avec Microsoft
 Client ID    : [Application ID Entra]
 Client Secret: [Secret Value Entra]
 ```
+### SAML Client 
+- Application qui demandee l'ahtentification de l'utilisateur 
+	- urn:federation:MicrosoftOnline
+```
+Client ID                  :   urn:federation:MicrosoftOnline
+Name                       :   Microsoft Entra ID Client
+Valid redirect URIs        :   https://login.microsoftonline.com/login.srf
+Master SAML Processing URL :   https://login.microsoftonline.com/d56b5879-c621-4f54-baf4-47dc342da17a/saml2
 
-**Test :** Bouton "Se connecter avec Microsoft" visible sur `auth.charif-labs.tech` → login `user-admin-01@ms.charif-labs.tech` → session Keycloak active ✅
+Name Id Format             :   email
+```
+### Paramètres Avancés et Synchronisation 
+Pour éviter les boucles de connexion et s'assurer que les utilisateurs sont importés proprement 
+#### Enta ID :
+Domain is Federated, not PHS.
+- Type: Custom — Status: Verified — Federated: **Yes** — Primary domain: Yes
+It means Entra has been told _"for users @ms.charif-labs.tech, don't authenticate them yourself — redirect to an external IdP (Keycloak SAML)"_. 
+#####
+#### Keycloak :
+Descendez dans les paramètres de l'Identity Provider :
+
+
+- **Trust Email :** `On` _(Évite de demander à l'utilisateur de valider son email après l'import)._
+- **Sync Mode :** `Import` _(Crée une copie locale de l'utilisateur dans la base Keycloak à la première connexion)._
+- **First login flow :** `first broker login`
+- **Prompt :** `login` _(Force Microsoft à toujours afficher l'écran de connexion au lieu d'utiliser un token silencieux en cache. C'est une sécurité supplémentaire contre les boucles de redirection)._
+	- Tells Entra what to show. Options: blank (Entra decides), `login` (always show Entra login screen), `none` (silent SSO only), `select_account`.
+### Test
+Bouton "Se connecter avec Microsoft" visible sur `auth.charif-labs.tech` 
+![](images/Phase-1-Identity-Keycloak-11.png)
+→ login `x@ms.charif-labs.tech` 
+![](images/Phase-1-Identity-Keycloak-12.png)
+
+→ session Keycloak active ✅
+![](images/Phase-1-Identity-Keycloak-13.png)
+
 
 ---
 
 ## 1.5 — Identity Provider Google (bouton "Se connecter avec Google")
 
-1. Google Cloud Console → APIs & Credentials → OAuth 2.0 Client IDs → Create
+ >Permettre aux utilisateurs de s'authentifier sur Keycloak en utilisant leur compte Google Workspace. L'authentification est déléguée à Google via le protocole OpenID Connect (OAuth 2.0).
+
+#### Étape 1 : Création des identifiants dans Google Cloud Console
+Même si vous utilisez Google Workspace, la création des identifiants se fait obligatoirement sur l'interface développeur de Google.
+1. Connectez-vous avec votre compte administrateur Workspace sur **console.cloud.google.com**.
+2. En haut à gauche, cliquez sur le menu déroulant des projets et sélectionnez **Nouveau projet** (New Project). Nommez-le `Keycloak-SSO` et créez-le.
+3. Allez dans le menu principal → **API et services** (APIs & Services) → **Écran de consentement OAuth**.
+4. **Audience :** Sélectionnez **Interne** (Internal). Cela sécurise l'accès à votre Workspace et ne nécessite aucune validation par Google.
+5. **App Information :** Saisissez le nom `Charif Labs SSO` ou `Keycloak` (le nom visible par les utilisateurs) et sélectionnez votre adresse email Workspace pour le support.
+6. **Contact Information :** Saisissez une adresse email pour être contacté en cas de changements sur le projet.
+7. **Finish :** Acceptez les étapes suivantes et sauvegardez pour terminer la création de l'écran.
+#### Étape 2 : Création des identifiants (Client ID et Secret)
+1. Google Cloud Console → APIs & Credentials → Client → Create OAuth client ID → Create
    - Type : Web application
+   - **Nom :** `keycloak-idp-google`
    - Redirect URI : `https://auth.charif-labs.tech/realms/charif-labs/broker/google/endpoint`
 2. Copier Client ID + Secret
-
+#### Étape 3 : Configuration dans Keycloak
 Keycloak → Identity Providers → Add provider → Google
 
 ```
@@ -215,7 +262,19 @@ Display Name : Se connecter avec Google
 Client ID    : [depuis Google Cloud Console]
 Client Secret: [depuis Google Cloud Console]
 ```
+#### Étape 4 : Paramètres Avancés et Synchronisation (Important)
 
+Pour assurer une création propre des comptes et forcer la sélection du compte Google à chaque connexion :
+- **Trust Email :** `On` _(Google a déjà vérifié l'email, cela évite l'étape de validation)._
+- **Sync Mode :** `Import` _(Crée une copie locale de l'utilisateur dans la base Keycloak)._
+- **First login flow :** `first broker login`
+- **Prompt :** `select_account` _(Force Google à afficher l'écran de choix de compte. C'est l'équivalent du `login` chez Microsoft, très utile si les utilisateurs ont un compte personnel et un compte pro sur le même navigateur)._
+#### Étape 4 : Test de Validation
+1. Déconnectez-vous de Keycloak.
+2. Allez sur l'URL de connexion : `https://auth.charif-labs.tech`
+3. Vérifiez que le bouton **"Se connecter avec Google"** est visible.
+4. Cliquez dessus, choisissez un compte de votre Google Workspace, et validez.
+5. La session Keycloak doit s'ouvrir avec succès ! ✅
 ---
 
 ## Endpoints Keycloak de Référence
@@ -239,7 +298,7 @@ Admin UI  : https://auth.charif-labs.tech/admin/charif-labs/console/
 curl -s https://auth.charif-labs.tech/realms/charif-labs/.well-known/openid-configuration | jq .issuer
 
 # Portainer redirige vers Cloudflare Access
-curl -I https://portainer.charif-labs.tech
+curl -I https://mgmt.charif-labs.tech
 
 # Logs Keycloak — connexions
 docker compose logs keycloak-1 | grep "type=LOGIN"
