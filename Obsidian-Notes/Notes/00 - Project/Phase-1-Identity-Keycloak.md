@@ -212,6 +212,13 @@ Pour éviter les boucles de connexion et s'assurer que les utilisateurs sont imp
 Domain is Federated, not PHS.
 - Type: Custom — Status: Verified — Federated: **Yes** — Primary domain: Yes
 It means Entra has been told _"for users @ms.charif-labs.tech, don't authenticate them yourself — redirect to an external IdP (Keycloak SAML)"_. 
+
+so we go to entra federated interface :
+``` powershell
+Install-Module Microsoft.Graph -Force -AllowClobber
+Connect-MgGraph -Scopes "Domain.ReadWrite.All"
+Update-MgDomain -DomainId "ms.charif-labs.tech" -AuthenticationType "Managed"
+```
 #####
 #### Keycloak :
 Descendez dans les paramètres de l'Identity Provider :
@@ -291,6 +298,11 @@ Admin UI  : https://auth.charif-labs.tech/admin/charif-labs/console/
 
 ---
 
+## Configure role based MFA 
+![](images/Phase-1-Identity-Keycloak-15.png)
+
+
+![](images/Phase-1-Identity-Keycloak-14.png)
 ## Validation Gatekeeper Phase 1
 
 ```bash

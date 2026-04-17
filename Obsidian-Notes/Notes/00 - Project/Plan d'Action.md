@@ -35,14 +35,14 @@ version: 3.2
 - [x] Stack Docker Keycloak + cloudflared déployée
 - [x] App Registration Entra ID (Client ID + Secret)
 - [x] Source OIDC Entra dans Keycloak — test login @ms.charif-labs.tech OK
-- [ ] **Configurer MFA TOTP obligatoire** pour groupe admins
-- [ ] **Créer les groupes corrects :** `bureau-1`, `bureau-2-it`, `bureau-2-dev`, `bureau-2-compta`
-- [ ] Attribuer le bon groupe à chaque utilisateur de test
+- [x] **Configurer MFA TOTP obligatoire** pour groupe admins
+- [x] **Créer les groupes corrects :** `bureau-1`, `bureau-2>it`, `bureau-2>dev`, `bureau-2>compta`
+- [x] Attribuer le bon groupe à chaque utilisateur de test
 
 ### 1.2 — Cloudflare Access (OIDC sur tous les services)
-- [ ] Provider OIDC Keycloak → Cloudflare Access
-- [ ] Policy Access : `auth`, `wazuh`, `n8n`, `portainer` → groupe `admins` uniquement
-- [ ] Test bout-en-bout : login Keycloak → accès Portainer
+- [x] Provider OIDC Keycloak → Cloudflare Access
+- [x] Policy Access : `auth`, `wazuh`, `n8n`, `portainer` → groupe `admins` uniquement
+- [x] Test bout-en-bout : login Keycloak → accès Portainer
 
 ### 1.3 — Portainer (premier service interne protégé)
 - [x] Déployer Portainer CE sur Docker Host
@@ -54,14 +54,14 @@ version: 3.2
 
 ---
 
-## ❌ Phase 2 — Endpoints Windows (Login fonctionnel)
+##  Phase 2 — Endpoints Windows (Login fonctionnel)
 
 *Faire fonctionner le login Windows selon le profil utilisateur.*  
 Voir [[Phase-2-Endpoints-Windows]] pour le guide détaillé.
 
 ### 2.A — Profil Bureau-2 : Entra ID + Entra Join
 
-- [ ] Vérifier domaine `ms.charif-labs.tech` en mode **Managed** (NON Federated) dans Entra
+- [x] Vérifier domaine `ms.charif-labs.tech` en mode **Managed** (NON Federated) dans Entra
 - [ ] Créer App Registration `n8n-iam-sync` avec permissions Graph API minimales
   - Permissions : `User.ReadWrite.All` + `GroupMember.ReadWrite.All`
   - **NE PAS** ajouter `Directory.ReadWrite.All` (sur-privilège)
@@ -73,7 +73,7 @@ Voir [[Phase-2-Endpoints-Windows]] pour le guide détaillé.
 
 ### 2.B — Profil Bureau-1 : GCPW
 
-- [ ] Google Cloud Identity tenant validé (`google.charif-labs.tech`)
+- [x] Google Cloud Identity tenant validé (`charif-labs.tech`)
 - [ ] Créer Service Account GCP avec Domain-Wide Delegation
   - Scope : `admin.directory.user` (restreint à OU Bureau-1)
 - [ ] Télécharger GCPW MSI (domaine = `google.charif-labs.tech`)
