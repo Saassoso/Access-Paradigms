@@ -318,8 +318,8 @@ docker compose logs keycloak-1 | grep "type=LOGIN"
 
 | Test                           | Attendu                        | ✅/❌ |
 | ------------------------------ | ------------------------------ | --- |
-| Portainer sans auth            | 302 → Cloudflare Access        |     |
-| Login user-admin-01            | MFA TOTP demandé               |     |
-| Login user-basic-01            | Pas de MFA                     |     |
+| Portainer sans auth            | 302 → Cloudflare Access        | ✅   |
+| Login user-admin-01            | MFA TOTP demandé               | ✅   |
+| Login user-basic-01            | Pas de MFA                     | ✅   |
 | Accès Wazuh avec user-basic-01 | Refusé par Cloudflare Access   |     |
 | Discovery endpoint             | Répond 200 avec issuer correct |     |

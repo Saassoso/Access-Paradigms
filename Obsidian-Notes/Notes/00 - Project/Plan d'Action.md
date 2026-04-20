@@ -62,7 +62,7 @@ Voir [[Phase-2-Endpoints-Windows]] pour le guide détaillé.
 ### 2.A — Profil Bureau-2 : Entra ID + Entra Join
 
 - [x] Vérifier domaine `ms.charif-labs.tech` en mode **Managed** (NON Federated) dans Entra
-- [ ] Créer App Registration `n8n-iam-sync` avec permissions Graph API minimales
+- [x] Créer App Registration `n8n-iam-sync` avec permissions Graph API minimales
   - Permissions : `User.ReadWrite.All` + `GroupMember.ReadWrite.All`
   - **NE PAS** ajouter `Directory.ReadWrite.All` (sur-privilège)
 - [ ] Stocker Client Secret dans Vault (ou `.env` temporairement)
