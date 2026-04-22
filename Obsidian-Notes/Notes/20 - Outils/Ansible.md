@@ -80,3 +80,47 @@ ansible/
 ansible windows -m win_ping
 # Résultat attendu : {"ping": "pong"}
 ```
+
+# Ansible 
+- Automation tools ( conf/ deploy / system )
+	- Infra as code : Playbooks 
+	- Agentless architecture : SSH/WinRM
+		- YAML : easy to read
+		- chef or puppet have their own env 
+	- Challenges during automation : no every operation may succeed on the first try 
+		- **declarative** : clear outcomes based on existing cdts
+			- error handling and state recognitions
+		- **Imperative** : step by step , flow with order of succeful operation 
+			- group and user maagment 
+![](images/Ansible.png)
+
+_Jinja2_ templating to incorporate varibales to our output msg by evaluating threm 
+
+### Ansible Galaxy 
+Community-contributed roles and collections 
+- Roles / Community / Tools / Time 
+## Install Ansible :
+#### Perquisites 
+
+``` python
+pip --version
+pip install ansible 
+```
+
+#### Installation 
+
+```
+
+sudo apt update
+
+
+ upgrade ansible 
+ 
+  pip intstall ansible --upgrade
+  
+  uninstall ansible 
+  install ansible@2.0
+  
+  
+  
+```
