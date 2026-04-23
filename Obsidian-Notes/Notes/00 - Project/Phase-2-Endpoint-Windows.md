@@ -128,9 +128,11 @@ Restart-Computer -Force
 - Google Admin Console → Domaines → Vérifier `google.charif-labs.tech`
 ### Étape 2 : Créer le Service Account GCP pour n8n
 
-1. Google Cloud Console → IAM & Admin → Service Accounts → Create
-2. Nom : `n8n-iam-sync`
+1. Google Cloud Console → IAM & Admin → Service Accounts → Create -> Done
+
+2. Nom : `n8n-iam-sync` : n8n-iam-sync@keycloak-sso-493514.iam.gserviceaccount.com
 3. Télécharger la clé JSON
+
 
 **Domain-Wide Delegation :**
 1. Google Admin Console → Security → API Controls → Domain-wide delegation → Add new

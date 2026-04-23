@@ -99,7 +99,64 @@ _Jinja2_ templating to incorporate varibales to our output msg by evaluating thr
 ### Ansible Galaxy 
 Community-contributed roles and collections 
 - Roles / Community / Tools / Time 
+- Efficient automation tasks
+- Create, publish, and share ansible roles
+![](images/Ansible-2.png)
+#### Ansible release Lifecycle
+![](images/Ansible-3.png)
+#### Introduction to ansible Galaxy
+Ecosystem of sharing
+- Roles 
+#### What is a role
+Package and organise automation taks 
+- files packahe. 
+	improve code reusability (toolbox)
+#### Publish and use ansible Galaxy roles
+```
+ansible-galaxy role init roles/my_first_roles # new directory structure
+
+# tasks/main.yml
+- name : Ensure NTP is installed
+  ansible.builtin.apt :
+    name: ntp
+    state: present # necessery softwae rs is prenset 
+    
+- name : Configure NTP
+  ansible.builtin.template :
+    src: ntp.conf.j2
+    dest: /etc/ntp.com
+  notify: restart ntp # notification to restart ehen chnages is made
+  
+- name : Ensure NTP service is runnning
+  ansible.builtin.service :
+    name: ntp
+    state: started
+    enabled: yes 
+```
+
+Incorporate a role in your project :
+```
+ansible-galaxy install your_username.your_role_name
+```
+
+Roles are hidden and stored ./ansible//roles
+- easily manage and share roles on playbooks
+#### Manage Roles efficiently
+Create a requirement.yml : List all roles you want to install : Maintain dependencies
+- streamline process of setting up env
+```
+- src: itnok:update_ubuntu
+- src: geerlingguy.nginx
+- src: russmckendrick.ansible_role_learnansbile_exemple
+  
+ansible-galaxy install -r requirements.yml
+
+pip install -r ~/.ansible/collections/ansible_collections/amazon/aws/requirements.txt
+```
+#### Ansible Galaxy Commands
+
 ## Install Ansible :
+
 #### Perquisites 
 
 ``` python
@@ -108,19 +165,217 @@ pip install ansible
 ```
 
 #### Installation 
+##### Ubuntu 
+```
+sudo -H apt-get update
+sudo -H apt-get install python3-pip
+
+sudo -H pip install ansible
+
+snap install multipass 
+multipass launch -n ansiblevm # Test ansible playbook
+multipass shell ansiblevm 
+```
+### Linking Ansible Playbooks to Virtual Machines
+Obtaining VM's IP address , prep for inventory file.
+- USe `multipass info ansiblevm ` to find IP 
+- Create an inventory file for Ansible tasks 
+```
+VM ip 
+SSH user
+```
+- Include SSH user in the inventory setup
+- Ensure IP reflects you actual VM address
+
+##### Run the first ansible playbook 
+- Verify setup of the virtual machine
+``` 
+ansible -i inventory_file ansiblevm -m ansible.builtin.setup
+```
+	- i : inventory
+	- m : module 
+		- ansible.builtin.setup {details} : facts : about the target host
+			- Wokring corrctly and ansible machine 
+
+### Ansible Automation Tool 
+Automate Provisong configuration and magemnt of app and system 
+- Ensures desired state for sytems 
+- USer-freindly declarative
+- streamlines 
+```
+python --version
+pip --version
+
+sudo -H pip install ansible 
+
+ansible --version
 
 ```
 
+  **ansible.builtin.ap**t : modules to manage packages on system that uses adavnaced manageing tool apt . // ansible take the necessray steps to ensurees its in the desired state 
+
+
+```
+multipass launch -n ansiblevm # lauch a virtual machine
+
+mutlipass info ansiblevm # Gater info about the VM (IP@, ...)
+```
+
+- Inventory File :
+```
+<Your_VM_IP>
+
+---
+- name: Con
+```
+
+```
+multipass shell ansiblevm # Entering virtual machine 
+
+systemctl status ntp
+
+```
+#### Laucnh of ansible Core versions
+![](images/Ansible-1.png)
+- 
+- collection freeze
+- Ansible community package
+- new package laucnh version 
+- individual collection are relseased
+- feature freeze on core ( stability )
+### Ansible Vault for Secure Data Management
+- Encrypts sensitive file and variables, in runtime in memory
+- Easily Manage shared credentials securely
+- Prevent accidental exposure of secrets
+- Decrypt data in memory during runtime
+#### Commands
+```
+pip install ansible
+database_pwd: pwd
+api_key: super-secret-api-key
+
+ansible-vault encrypt secrets.yml # in the directoy 
+# System set pwd 
+
+21312544651856684518168543513845513874841816843..
+
+ansible-vault view secrets.yml # inspect encrypted file
+# demande pwd
+
+ansible-vault encrypt_string 'my_new_password' --name 'db_password' 
+db_password: !vault | 
+			$ANSIBLE_VAULT;1.1;AES256
+3039394539435613434469493334524981356439843549..
+```
+
+- playbook.yml : localhost external file to retevie varibale 
+```
+- hosts: localhost
+  vars_files:
+    - secrets.yml
+  tasks: 
+    - name: Print the database password 
+      debug: 
+        msg: "The database password is {{ database_password }}"
+        
+ansible-playbook playbook.yml --vault-id @prompt # keep sensitive info seperate from our playbook . prompt ask pwd . automated access
+
+# store passwprd in a secure file enbaling semaless access securly 
+```
+
+- password-file : secrets can be accessd promgaplt / restrict access to this file 
+```
+ansible-playbook paybook.yml --vault-id vault_file@/path/to/vault_passwordtxt
+```
+
+- Commiting encrypted file to a repository : 
+![](images/Ansible-4.png)
+#### Vault Access Management
+safeguarding vault pwd is crucial in teams
+- Verify the functionality of playbooks before any updates to encrypted content , to prevent potential down-times
+![](images/Ansible-5.png)- least privilege 
+
+### Introduction To LAMP Stack
+All in one web and server 
+- Integrates : Linux, Apache, MariaDB and PHP to create a web dev env
+![](images/Ansible-6.png)
+- perrformace testing
+- ngnix reverse proxy : enhance performance through caching
+
+Ubuntu linux rich env many akage and dependecy
+```
 sudo apt update
+sudo apt install apache2
 
+sudo apt install mariadb-server
 
- upgrade ansible 
- 
-  pip intstall ansible --upgrade
+- protect againt aunthoerised 
+sudo mysql_secure_installation
+
+- remove root pwd
+  remoce aninanous users 
+  disbale root acces
+  del test db
   
-  uninstall ansible 
-  install ansible@2.0
-  
-  
-  
+
 ```
+
+![](images/Ansible-7.png)
+
+use php with apacvhe
+```
+sudo apt install php libapache2-mod-php php-mysql
+```
+
+### Directory structure for chapter 04
+![](images/Ansible-8.png)
+```
+chapter04
+| cloud-init.yaml # cloud indtance init
+| example_key
+| example_key.pub # secure communication
+| - group_vars/ # definintion to stremlaine dep proecess 
+			| common.yml
+| hosts # host def and inventory def
+| hosts.example
+| - roles/ # service configuration
+			| apache/ # setting up apache server (scripts and )
+			| common/
+			| mariadb/
+			| php/
+| site.yml
+```
+### LEMP Stack
+- Replace Apache with NGINX
+- Handke high traffic
+- Simple web server mgmt
+- Integrate seamlessly with frameworks ( )
+### Deploying a LAMP Stack with Ansible
+
+## Overview of Multiple Distributions
+### Linux Distributions Overview
+multiple Linux Disttrubution
+- DEbian and redhat family lines
+- apt / yam ; dnf
+#### Adapting Playbooks  for Diverse linux distributions
+ngninx : tool for automatic deployement
+```
+- name: Install NGINX on Debian systems
+  apt:
+    name: nginx
+    state: latest
+  when: ansible_os_family == 'Debian'
+  
+- name: Install NGINX on Red Hat systems
+  dnf:
+    name: nginx
+    state: latest
+  when: ansible_os_family == 'RedHat'
+```
+
+Dynamically include varibale files dependenat on the operation system 
+```
+- name: "Include the operating system specific variables"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml" ## repalced at runtime
+```
+![](images/Ansible-9.png)
