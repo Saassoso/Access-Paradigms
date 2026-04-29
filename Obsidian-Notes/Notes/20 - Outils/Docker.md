@@ -59,3 +59,102 @@ docker compose restart [service]     # redémarrer un service
 docker compose up -d                 # démarrer en background
 docker system df                     # espace disque utilisé
 ```
+
+# Docker 
+
+Namesapces
+
+Cgroups 
+
+### Lighter VMs on non Linux machines and 
+Kernel sharing 
+### Container VS Image
+- Running image 
+
+### Image = Stack of layers
+Application code
+dependencies
+runtime system libraries
+base os
+
+Docker file 
+instractuin add Copy run 
+- add a new layer
+cmd env expose 
+- add metadata no layers 
+
+```
+from node:20-alpine
+workdire /app
+copy package.json .
+run npm install 
+copy ..
+```
+
+cached layers // order of instrctuions to cache npm layers 
+### Docker registry 
+image distrubution 
+shared  layer / layer cache 
+### DockerFile 
+**ENV**
+- set env variable , at build and runtime
+EXPOSE
+- documentation . the port still need to be opened with -p flag
+CMD
+- default commande that run when container start (exe when container crated m not during build )
+ENTRYPOINT 
+- define executable m while CMD define the default arguments
+	- can be overriden expliclity with --entrypoint 
+### The build Conctext
+docjker build .
+
+- .dockerignore 
+### Volumes 
+**named volumes** 
+- docker manage storage location , for persisten t data
+`docker run -v my-data:/var/lib/postgresql/data postgres`
+First-use copy
+
+BIND MOUNTS
+- local directory is mapped into the container 
+`docker run -v ./src:/app/src my-app`
+without bind and sync live into container , full rebuild nedded on evry chnage
+Obscure ehat is the path into the image 
+covverd bby the mount
+
+### Networking
+Container are isolated 
+#### Host to container 
+create a bridge `host:container` map to a port on machine 
+- `docker run -p 3000:3000 my-app`
+#### Continare to contanier 
+docker create a default network : **bridge**
+- container on same network reach other by ip @ 
+
+Custom network docker offer dns resolution , by contianer name automaticcly 
+- docker compose create a custome netwokr behind the see m whic make the docker netwk find each other 
+```
+docker network create my-network
+
+docker run -- name api --network my-network my-api
+docker run -- name db --network my-network postgres
+```
+
+Isolation : 3 tier architecture 
+
+
+### Docker compose 
+depends on 
+- only stratup not readiness 
+```
+depends_on: 
+db:
+condition: service_healty
+```
+
+```
+while(!connected)
+retry with backoff
+```
+
+declarative yaml file to imperatiive commands 
