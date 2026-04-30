@@ -61,100 +61,105 @@ docker system df                     # espace disque utilisé
 ```
 
 # Docker 
+## 1. Under the Hood: How Docker Works
+Docker isn't magic; it relies on core Linux kernel features to create isolation without the heavy overhead of traditional Virtual Machines (VMs).
 
-Namesapces
+* **Namespaces:** Provide **isolation**. They ensure a container only sees its own processes, network, and file system.
+* **Cgroups (Control Groups):** Provide **resource limitation**. They restrict how much CPU, memory, or disk I/O a container can use.
+* **Kernel Sharing:** Unlike VMs that boot a full guest OS, containers share the host's Linux kernel. (On Windows/Mac, Docker runs a lightweight Linux VM in the background to provide this kernel).
 
-Cgroups 
+---
 
-### Lighter VMs on non Linux machines and 
-Kernel sharing 
-### Container VS Image
-- Running image 
+## 2. Images vs. Containers
+* **Image:** A static, read-only stack of layers. It is the blueprint.
+* **Container:** A running instance of an image. It adds a thin, writable layer on top of the image stack.
 
-### Image = Stack of layers
-Application code
-dependencies
-runtime system libraries
-base os
+### Anatomy of an Image (Stack of Layers)
+An image is built from the bottom up:
+1.  **Base OS** (e.g., Alpine, Ubuntu)
+2.  **Runtime / System Libraries** (e.g., Node.js, Python)
+3.  **Dependencies** (e.g., `node_modules`)
+4.  **Application Code**
 
-Docker file 
-instractuin add Copy run 
-- add a new layer
-cmd env expose 
-- add metadata no layers 
+*Note on Registry:* Docker registries (like Docker Hub) distribute these images. They save bandwidth by sharing and reusing cached layers across different images.
 
-```
-from node:20-alpine
-workdire /app
-copy package.json .
-run npm install 
-copy ..
-```
+---
 
-cached layers // order of instrctuions to cache npm layers 
-### Docker registry 
-image distrubution 
-shared  layer / layer cache 
-### DockerFile 
-**ENV**
-- set env variable , at build and runtime
-EXPOSE
-- documentation . the port still need to be opened with -p flag
-CMD
-- default commande that run when container start (exe when container crated m not during build )
-ENTRYPOINT 
-- define executable m while CMD define the default arguments
-	- can be overriden expliclity with --entrypoint 
-### The build Conctext
-docjker build .
+## 3. The Dockerfile: Building the Blueprint
+The `Dockerfile` contains the instructions to build an image. 
 
-- .dockerignore 
-### Volumes 
-**named volumes** 
-- docker manage storage location , for persisten t data
-`docker run -v my-data:/var/lib/postgresql/data postgres`
-First-use copy
+### Instructions & Layers
+* **Layer-creating instructions:** `RUN`, `COPY`, `ADD`. Every time you use these, Docker creates a new layer.
+* **Metadata instructions:** `CMD`, `ENV`, `EXPOSE`, `WORKDIR`. These do *not* create new layers; they just add configuration metadata to the image.
 
-BIND MOUNTS
-- local directory is mapped into the container 
-`docker run -v ./src:/app/src my-app`
-without bind and sync live into container , full rebuild nedded on evry chnage
-Obscure ehat is the path into the image 
-covverd bby the mount
-
-### Networking
-Container are isolated 
-#### Host to container 
-create a bridge `host:container` map to a port on machine 
-- `docker run -p 3000:3000 my-app`
-#### Continare to contanier 
-docker create a default network : **bridge**
-- container on same network reach other by ip @ 
-
-Custom network docker offer dns resolution , by contianer name automaticcly 
-- docker compose create a custome netwokr behind the see m whic make the docker netwk find each other 
-```
-docker network create my-network
-
-docker run -- name api --network my-network my-api
-docker run -- name db --network my-network postgres
+### Layer Caching (Crucial for Speed)
+Docker caches layers to speed up builds. The **order of instructions matters**. You should copy dependencies and install them *before* copying your source code. 
+```dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json .         # Copy only package.json first
+RUN npm install             # This layer gets cached unless package.json changes
+COPY . .                    # Now copy the frequently changing source code
 ```
 
-Isolation : 3 tier architecture 
+### Key Commands Explained
+| Command | What it does |
+| :--- | :--- |
+| **ENV** | Sets environment variables at both build time and runtime. |
+| **EXPOSE** | Purely documentation. It tells the user which port the app uses, but you *still* need to map it at runtime with `-p`. |
+| **CMD** | The default command executed when the container starts. Can be easily overridden by passing arguments to `docker run`. |
+| **ENTRYPOINT** | Defines the main executable of the container. It is harder to override (requires `--entrypoint`). Often used alongside CMD (where CMD provides default arguments to the ENTRYPOINT). |
 
+### The Build Context & Ignore
+* `docker build .` sends everything in the current directory (`.`) to the Docker daemon as the "build context".
+* **.dockerignore:** Used to prevent unnecessary files (like local `node_modules` or `.git`) from being sent to the daemon, speeding up the build and keeping the image lean.
 
-### Docker compose 
-depends on 
-- only stratup not readiness 
-```
-depends_on: 
-db:
-condition: service_healty
-```
+---
 
-```
-while(!connected)
-retry with backoff
-```
+## 4. Volumes & Storage (Data Persistence)
+Containers are ephemeral; if they die, their writable layer dies. To save data, use storage.
 
-declarative yaml file to imperatiive commands 
+### Named Volumes
+* Managed entirely by Docker (stored in a hidden location on the host).
+* Great for persistent data like database files.
+* **First-use copy:** If the container has files at the volume's destination path, Docker will copy those files into the volume the first time it's created.
+* *Example:* `docker run -v my-data:/var/lib/postgresql/data postgres`
+
+### Bind Mounts
+* Maps a specific directory on your local host directly into the container.
+* Essential for local development (syncs live changes into the container without needing a full rebuild).
+* **Warning:** The host directory completely obscures (covers up) whatever was at that path inside the image.
+* *Example:* `docker run -v ./src:/app/src my-app`
+
+---
+
+## 5. Networking
+Containers are isolated by default. 
+
+* **Host to Container:** You must bridge the host to the container by mapping a port.
+    * `docker run -p 3000:3000 my-app` (maps Host Port 3000 to Container Port 3000).
+* **Container to Container:**
+    * Docker puts containers on a default network called `bridge`. They can reach each other via IP address, but IPs change.
+    * **Custom Networks:** Create one with `docker network create my-network`. Containers on a custom network get **automatic DNS resolution** (they can talk to each other using their container names instead of IPs).
+    * *Example:* `docker run --name api --network my-network my-api` can talk to `docker run --name db --network my-network postgres` by simply calling `db:5432`.
+* **Isolation:** Useful for a 3-tier architecture (e.g., front-end network, back-end network, database network) to strictly control which containers can see each other.
+
+---
+
+## 6. Docker Compose
+Docker Compose translates a **declarative YAML file** into the **imperative commands** needed to spin up multiple containers, networks, and volumes at once. Under the hood, it automatically creates a custom network so your services can discover each other by name.
+
+### Startup Order (`depends_on`)
+By default, `depends_on` only waits for the dependency container to *start*, not for the application inside it to actually be ready (e.g., a database booting up).
+To fix this, you use health checks:
+```yaml
+depends_on:
+  db:
+    condition: service_healthy
+```
+*Note:* Your application code should still be resilient! 
+Always implement 
+```
+while (!connected) { retry with backoff }
+``` 
+logic in your code to handle database drops or slow startups gracefully.
