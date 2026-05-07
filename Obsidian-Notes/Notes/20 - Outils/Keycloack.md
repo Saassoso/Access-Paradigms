@@ -6,22 +6,22 @@ concepts:
 ---
 ## Rôle dans ce projet
 
-IdP (Identity Provider) central. Remplace Authentik. Gère : utilisateurs, groupes, rôles, SSO, MFA, OIDC, SAML, fédération d'identité.
+IdP (Identity Provider) central. Remplace keycloak. Gère : utilisateurs, groupes, rôles, SSO, MFA, OIDC, SAML, fédération d'identité.
 
 Comprend [[OIDC Flow]] et [[SAML Federation]] avant de configurer.
 
-## Pourquoi Keycloak plutôt qu'Authentik
+## Pourquoi Keycloak
 
-||Authentik|Keycloak|
-|---|---|---|
-|Clustering natif|❌|✅ Infinispan|
-|Support SAML enterprise|Limité|Complet|
-|Helm Chart officiel|Non|✅ Bitnami|
-|k8s ready|Basique|✅ Operator dispo|
-|Documentation|Communauté|RedHat + communauté|
-|FAPI compliance|Non|✅|
-|Admin REST API|Oui|✅ Complet|
-|Migration LDAP/AD|Limitée|✅ native|
+|                         | **Authentik** | Keycloak            |
+| ----------------------- | ------------- | ------------------- |
+| Clustering natif        | ❌             | ✅ Infinispan        |
+| Support SAML enterprise | Limité        | Complet             |
+| Helm Chart officiel     | Non           | ✅ Bitnami           |
+| k8s ready               | Basique       | ✅ Operator dispo    |
+| Documentation           | Communauté    | RedHat + communauté |
+| FAPI compliance         | Non           | ✅                   |
+| Admin REST API          | Oui           | ✅ Complet           |
+| Migration LDAP/AD       | Limitée       | ✅ native            |
 
 ---
 
@@ -246,17 +246,17 @@ KC_ADMIN_PASSWORD=<openssl rand -hex 24>
 
 ## Compte break-glass
 
-Comme pour Authentik, toujours avoir un compte admin local Keycloak (`akadmin`) **non fédéré**. Si la fédération SAML/OIDC est cassée, ce compte permet d'accéder au Realm Admin Console directement.
+Comme pour keycloak, toujours avoir un compte admin local Keycloak (`akadmin`) **non fédéré**. Si la fédération SAML/OIDC est cassée, ce compte permet d'accéder au Realm Admin Console directement.
 
 Mot de passe imprimé, sous pli scellé. Format : `akadmin` + `${KC_ADMIN_PASSWORD}`.
 
 ---
 
-## Migration depuis Authentik
+## Migration depuis keycloak
 
 Voir [[Keycloak Migration Runbook]] pour :
 
-- Export des utilisateurs Authentik
+- Export des utilisateurs keycloak
 - Recréation des groupes/rôles dans Keycloak
 - Reconfiguration des clients OIDC/SAML
 - Mise à jour Cloudflare Access

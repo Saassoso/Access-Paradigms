@@ -6,8 +6,8 @@ tags:
   - oauth
   - oidc
 liens:
-  - Authentik
   - Cloudflare
+  - keycloak
 ---
 # OpenID Connect (OIDC)
 ## Relation avec OAuth 2.0
@@ -17,22 +17,22 @@ liens:
 OIDC ajoute un **ID Token** (JWT) qui contient l'identité de l'utilisateur. Sans OIDC, OAuth ne sait pas *qui* s'est connecté.
 ## Les 4 rôles
 
-| Rôle | Description | Dans ce projet |
-|---|---|---|
-| Resource Owner | L'utilisateur | Toi / les utilisateurs de test |
-| Client | L'app qui demande l'accès | Cloudflare Access |
-| Authorization Server | Émet les tokens | [[../20 - Outils/Authentik]] |
-| Resource Server | La ressource protégée | Wazuh, n8n, Grafana |
+| Rôle                 | Description               | Dans ce projet                 |
+| -------------------- | ------------------------- | ------------------------------ |
+| Resource Owner       | L'utilisateur             | Toi / les utilisateurs de test |
+| Client               | L'app qui demande l'accès | Cloudflare Access              |
+| Authorization Server | Émet les tokens           | [[keycloak]]                   |
+| Resource Server      | La ressource protégée     | Wazuh, n8n, Grafana            |
 ## Authorization Code Flow (le flux standard)
 
 ```
 1. Utilisateur tente d'accéder à wazuh.charif-labs.tech
-2. Cloudflare Access intercepte → redirige vers Authentik (/authorize?...)
-3. Authentik affiche la page de login
-4. Utilisateur s'authentifie (password + MFA Authentik)
-5. Authentik redirige → Cloudflare Access avec un code (?code=abc123)
+2. Cloudflare Access intercepte → redirige vers keycloak (/authorize?...)
+3. keycloak affiche la page de login
+4. Utilisateur s'authentifie (password + MFA keycloak)
+5. keycloak redirige → Cloudflare Access avec un code (?code=abc123)
 6. Cloudflare Access échange le code → POST /token avec client_id + client_secret
-7. Authentik répond avec : access_token + id_token (JWT)
+7. keycloak répond avec : access_token + id_token (JWT)
 8. Cloudflare Access valide les claims, crée un JWT Cloudflare signé (cookie)
 9. Requête transmise au service via cloudflared
 ```
@@ -57,11 +57,13 @@ OIDC ajoute un **ID Token** (JWT) qui contient l'identité de l'utilisateur. San
 }
 ```
 ## Discovery endpoint
-Chaque OIDC provider publie sa configuration à :  
+- Chaque OIDC provider publie sa configuration à :  
 `https://{issuer}/.well-known/openid-configuration`
-Pour Authentik :  
+
+- Pour keycloak :  
 `https://auth.charif-labs.tech/.well-known/openid-configuration`
-Contient : les URLs des endpoints, les algorithmes supportés, la clé publique de signature.
+
+- Contient : les URLs des endpoints, les algorithmes supportés, la clé publique de signature.
 ## Inspecter un token
 → Coller le JWT sur **jwt.io** pour décoder Header + Payload + vérifier la signature.
 ## Différence OIDC vs SAML
@@ -72,5 +74,5 @@ Contient : les URLs des endpoints, les algorithmes supportés, la clé publique 
 | Transport | HTTP redirect + JSON API | HTTP POST (XML signé) |
 | Usage | Apps web modernes, APIs | SSO enterprise, legacy |
 | Verbosité | Simple | Complexe |
-Dans ce projet : OIDC pour Cloudflare Access ↔ Authentik. 
-- [[SAML Federation]] pour Authentik ↔ Entra ID.
+Dans ce projet : OIDC pour Cloudflare Access ↔ keycloak. 
+- [[SAML Federation]] pour keycloak ↔ Entra ID.

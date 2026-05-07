@@ -4,17 +4,17 @@ version: 3.2
 ---
 ## Composants et Rôles IAM
 
-| Composant                          | Rôle IAM                                           |
-| ---------------------------------- | -------------------------------------------------- |
-| **Authentik** (→ Keycloak Phase 5) | IdP — PDP central — SSOT                           |
-| **n8n**                            | Bus d'événements JML — Sync multi-annuaires        |
-| **Cloudflare Access**              | PEP — applique les décisions à l'edge              |
-| **Microsoft Entra ID**             | Satellite passif — Bureau-2 uniquement             |
-| **Google Workspace**               | Satellite passif — Bureau-1 uniquement             |
-| **Action1**                        | Enforcement endpoint — PEP jusqu'au device         |
-| **Ansible**                        | PAP — politiques CIS, BitLocker                    |
-| **Wazuh**                          | Audit trail — confirme l'application des décisions |
-| **IA (LLM)**                       | Analyste consultatif — alertes uniquement          |
+| Composant              | Rôle IAM                                           |
+| ---------------------- | -------------------------------------------------- |
+| Keycloak               | IdP — PDP central — SSOT                           |
+| **n8n**                | Bus d'événements JML — Sync multi-annuaires        |
+| **Cloudflare Access**  | PEP — applique les décisions à l'edge              |
+| **Microsoft Entra ID** | Satellite passif — Bureau-2 uniquement             |
+| **Google Workspace**   | Satellite passif — Bureau-1 uniquement             |
+| **Action1**            | Enforcement endpoint — PEP jusqu'au device         |
+| **Ansible**            | PAP — politiques CIS, BitLocker                    |
+| **Wazuh**              | Audit trail — confirme l'application des décisions |
+| **IA (LLM)**           | Analyste consultatif                               |
 
 ---
 
@@ -31,13 +31,13 @@ Utilisateur (VLAN 20)
 [Cloudflare Access] — PEP — intercepte + vérifie
     │
     ▼  redirect OIDC
-[Authentik / Keycloak] — IdP / PDP — authentifie + émet claims
+[Keycloak] — IdP / PDP — authentifie + émet claims
     │
     ├── SSO silencieux (cookie Google / PRT Microsoft)
     │
     ├── OIDC → Portainer, Wazuh, Grafana, n8n, Harbor, Gitea
     │
-    └── Synchro (par n8n) : Authentik → Entra ID OU Google Workspace
+    └── Synchro (par n8n) : keycloak → Entra ID OU Google Workspace
                                             (jamais les deux pour un même user)
 ```
 
@@ -47,18 +47,18 @@ Utilisateur (VLAN 20)
 
 ### Joiner (nouvel employé)
 ```
-1. Admin crée l'utilisateur dans Authentik + assigne le groupe (bureau-1 OU bureau-2)
-2. Authentik émet un event webhook → n8n
+1. Admin crée l'utilisateur dans keycloak + assigne le groupe (bureau-1 OU bureau-2)
+2. Keycloak émet un event webhook → n8n
 3. n8n Switch : bureau-1 → Google Admin SDK | bureau-2 → Graph API
 4. Compte satellite créé (hash password synchronisé)
 5. Action1 : scripts onboarding (LAPS, hardening CIS, Sysmon, Wazuh agent)
 6. Wazuh : audit trail de la création
-7. Admin renseigne l'action1_agent_id dans le profil Authentik
+7. Admin renseigne l'action1_agent_id dans le profil keycloak
 ```
 
 ### Mover (changement de poste)
 ```
-1. Admin modifie le groupe dans Authentik
+1. Admin modifie le groupe dans keycloak
    ⚠️ Si changement de profil (bureau-1 → bureau-2) :
    → Offboarder l'ancien satellite (désactiver Google OU Entra)
    → Onboarder le nouveau satellite (créer Entra OU Google)
@@ -68,7 +68,7 @@ Utilisateur (VLAN 20)
 
 ### Leaver (départ) — Ordre d'opérations CORRIGÉ
 ```
-1. Désactiver dans Authentik → webhook → n8n
+1. Désactiver dans Keycloak → webhook → n8n
 2. Révoquer satellite (Google suspend OU Entra disable + revokeTokens)
 3. ⚠️ Rotation LAPS via Action1 (PENDANT que réseau encore actif)
 4. Confirmer rotation LAPS (GET /jobs/{job_id})
@@ -79,26 +79,26 @@ Utilisateur (VLAN 20)
 
 ---
 
-## RBAC Authentik → Services
+## RBAC keycloak → Services
 
-| Groupe Authentik | Cloudflare Access | Portainer | n8n | Wazuh |
+| Groupe keycloak   | Cloudflare Access | Portainer | n8n | Wazuh |
 |---|---|---|---|---|
-| `bureau-2-it` | Tous services | Administrator | Accès | Accès |
-| `bureau-2-dev` | Services Dev | Standard | — | — |
+| `bureau-2-it`     | Tous services | Administrator | Accès | Accès |
+| `bureau-2-dev`    | Services Dev | Standard | — | — |
 | `bureau-2-compta` | Services Compta | Read-only | — | — |
-| `bureau-1` | Services Bureau-1 | — | — | — |
+| `bureau-1`        | Services Bureau-1 | — | — | — |
 
 ---
 
 ## PAM — Comptes Privilégiés
 
-| Compte | Type | Stockage | Usage |
-|---|---|---|---|
-| `akadmin` (Authentik/Keycloak) | Local non fédéré | Pli scellé + Vault | Break-glass IdP |
-| `breakglass@*.onmicrosoft.com` | Entra natif non fédéré | Pli scellé physique | Break-glass si Authentik down |
-| `n8n-iam-sync` (App Registration) | Service Principal Azure | Vault `secret/n8n/entra` | Provisioning Graph API |
-| `n8n-google-sa` (Service Account GCP) | Service Account JSON | Vault `secret/n8n/google` | Provisioning Admin SDK |
-| Root Docker Host | SSH key uniquement | Vault SSH Secrets Engine | Administration serveur |
+| Compte                                | Type                    | Stockage                  | Usage                        |
+| ------------------------------------- | ----------------------- | ------------------------- | ---------------------------- |
+| `akadmin` (Keycloak)                  | Local non fédéré        | Pli scellé + Vault        | Break-glass IdP              |
+| `breakglass@*.onmicrosoft.com`        | Entra natif non fédéré  | Pli scellé physique       | Break-glass si keycloak down |
+| `n8n-iam-sync` (App Registration)     | Service Principal Azure | Vault `secret/n8n/entra`  | Provisioning Graph API       |
+| `n8n-google-sa` (Service Account GCP) | Service Account JSON    | Vault `secret/n8n/google` | Provisioning Admin SDK       |
+| Root Docker Host                      | SSH key uniquement      | Vault SSH Secrets Engine  | Administration serveur       |
 
 **Règle absolue :** Les comptes break-glass ne se connectent JAMAIS en usage normal.  
 Tout accès break-glass = alerte Wazuh niveau critique.
@@ -110,9 +110,9 @@ Tout accès break-glass = alerte Wazuh niveau critique.
 > Le rapport précédent affirmait que Keycloak est le SSOT absolu, mais les utilisateurs se connectent à Windows via Google ou Entra, pas via Keycloak.
 
 **C'est correct et intentionnel :**
-- Keycloak/Authentik = SSOT pour la **gestion** des identités (créer, modifier, révoquer)
+- Keycloak = SSOT pour la **gestion** des identités (créer, modifier, révoquer)
 - Google/Entra = SSOT pour la **vérification locale** des credentials Windows (résilience)
-- Si Authentik tombe, les utilisateurs peuvent encore se connecter à leur PC (pas de SPOF pour le login Windows)
-- Si Authentik tombe, les accès aux outils internes (Portainer, Wazuh…) sont bloqués par Cloudflare Access → bonne chose
+- Si keycloak tombe, les utilisateurs peuvent encore se connecter à leur PC (pas de SPOF pour le login Windows)
+- Si keycloak tombe, les accès aux outils internes (Portainer, Wazuh…) sont bloqués par Cloudflare Access → bonne chose
 
 C'est le compromis entre résilience (login Windows) et contrôle (outils internes).

@@ -5,19 +5,19 @@ tags: [référence, secrets, sécurité, rotation]
 ---
 ## Registre des secrets
 
-| Secret | Stockage | Rotation | Responsable |
-|---|---|---|---|
-| Mot de passe WinRM | Ansible Vault (AES-256) | 90 jours | Admin |
-| Mot de passe Ansible Vault | Variable d'env `VAULT_PASS` uniquement | 90 jours | Admin |
-| Clé API Cloudflare | Var d'env `TF_VAR_cloudflare_api_token` | 180 jours | Admin |
-| Clé API Action1 | Credentials store n8n (AES-256) | 180 jours | n8n |
-| Tokens HMAC webhooks n8n | Credentials store n8n | 90 jours | Admin |
-| Client secret OIDC Authentik | `.env` chmod 600 | Suspicion | Admin |
-| Tunnel token Cloudflare | `.env` ignoré .gitignore | Suspicion | Terraform |
-| Mots de passe LAPS | KeePass + backup B2 chiffré | 24h auto (Action1) | Action1 |
-| Clés privées WireGuard | `wg0.conf` chmod 600 | 365 jours | Admin |
-| Mot de passe break-glass | Pli scellé imprimé | 365 jours | Admin |
-| Clé SSH Docker Host | `~/.ssh/sovereign_ed25519` + backup USB | Suspicion | Admin |
+| Secret                      | Stockage | Rotation | Responsable |
+| --------------------------- | --------------------------------------- | ------------------ | ----------- |
+| Mot de passe WinRM          | Ansible Vault (AES-256) | 90 jours | Admin |
+| Mot de passe Ansible Vault  | Variable d'env `VAULT_PASS` uniquement | 90 jours | Admin |
+| Clé API Cloudflare          | Var d'env `TF_VAR_cloudflare_api_token` | 180 jours | Admin |
+| Clé API Action1             | Credentials store n8n (AES-256) | 180 jours | n8n |
+| Tokens HMAC webhooks n8n    | Credentials store n8n | 90 jours | Admin |
+| Client secret OIDC keycloak | `.env` chmod 600 | Suspicion | Admin |
+| Tunnel token Cloudflare     | `.env` ignoré .gitignore | Suspicion | Terraform |
+| Mots de passe LAPS          | KeePass + backup B2 chiffré | 24h auto (Action1) | Action1 |
+| Clés privées WireGuard      | `wg0.conf` chmod 600 | 365 jours | Admin |
+| Mot de passe break-glass    | Pli scellé imprimé | 365 jours | Admin |
+| Clé SSH Docker Host         | `~/.ssh/sovereign_ed25519` + backup USB | Suspicion | Admin |
 
 ## Règles absolues
 
@@ -37,7 +37,7 @@ git diff --cached | grep -iE "password|secret|token|key|pass"
 
 Si un secret est compromis ou suspecté compromis :
 
-1. **Révoquer immédiatement** dans l'interface source (Cloudflare, Entra, Authentik)
+1. **Révoquer immédiatement** dans l'interface source (Cloudflare, Entra, keycloak)
 2. **Générer un nouveau secret** avec entropie suffisante (`openssl rand -hex 32`)
 3. **Mettre à jour** dans tous les emplacements de stockage
 4. **Tester** que les services fonctionnent avec le nouveau secret

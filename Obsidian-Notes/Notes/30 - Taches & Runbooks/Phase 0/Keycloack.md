@@ -7,6 +7,6 @@
 
 ### The TL;DR:
 
-- **Authentik:** Has a beautifully integrated, built-in tool to push users to Entra ID, but makes you pay for it.
+- **keycloak:** Has a beautifully integrated, built-in tool to push users to Entra ID, but makes you pay for it.
     
 - **Keycloak:** Is 100% free with no paywalls, but you have to use third-party plugins or write custom configurations if you want automatic background user-syncing to Google or Entra.

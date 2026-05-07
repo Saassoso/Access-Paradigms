@@ -1,16 +1,16 @@
 {
 	"nodes":[
-		{"id":"94ff349fcde3d0b9","x":-320,"y":-400,"width":125,"height":60,"type":"text","text":"Utilisateur"},
-		{"id":"ab1d0f3404b18274","x":-140,"y":-400,"width":205,"height":60,"type":"text","text":"wazuh.charif-labs.tech"},
-		{"id":"84728e780a32d371","x":-430,"y":-280,"width":345,"height":60,"type":"text","text":"Cloudflare Access intercepte la requête"},
-		{"id":"1ef3be1cd807f185","x":-362,"y":-180,"width":445,"height":60,"type":"text","text":"Vérifie : y a-t-il un JWT Cloudflare valide dans le cookie ?"},
-		{"id":"90f8e76f3c5943ce","x":-362,"y":-80,"width":88,"height":60,"type":"text","text":"OUI"},
-		{"id":"1f1433f48957db40","x":-362,"y":20,"width":92,"height":50,"type":"text","text":"NON"},
-		{"id":"380df679f93710e8","x":-232,"y":-80,"width":390,"height":60,"type":"text","text":"transmettre la requête via cloudflared → Wazuh"},
-		{"id":"00540a049aed2873","x":-232,"y":15,"width":450,"height":60,"type":"text","text":"rediriger vers Authentik (OIDC Authorization Code Flow)"},
-		{"id":"6956e761f287d0b5","x":-232,"y":120,"width":315,"height":80,"type":"text","text":"Utilisateur se connecte sur Authentik\n(password + MFA Authentik)"},
-		{"id":"9a03ae6746cc00bb","x":-232,"y":260,"width":352,"height":100,"type":"text","text":"Cloudflare reçoit l'id_token\nValide les claims (email, groups)\nCrée un JWT Cloudflare signé (cookie 8h)"},
-		{"id":"7012dbb0e7360363","x":-232,"y":420,"width":297,"height":60,"type":"text","text":"Requête transmise au service ✅"}
+		{"id":"94ff349fcde3d0b9","type":"text","text":"Utilisateur","x":-320,"y":-400,"width":125,"height":60},
+		{"id":"ab1d0f3404b18274","type":"text","text":"wazuh.charif-labs.tech","x":-140,"y":-400,"width":205,"height":60},
+		{"id":"84728e780a32d371","type":"text","text":"Cloudflare Access intercepte la requête","x":-430,"y":-280,"width":345,"height":60},
+		{"id":"1ef3be1cd807f185","type":"text","text":"Vérifie : y a-t-il un JWT Cloudflare valide dans le cookie ?","x":-362,"y":-180,"width":445,"height":60},
+		{"id":"90f8e76f3c5943ce","type":"text","text":"OUI","x":-362,"y":-80,"width":88,"height":60},
+		{"id":"1f1433f48957db40","type":"text","text":"NON","x":-362,"y":20,"width":92,"height":50},
+		{"id":"380df679f93710e8","type":"text","text":"transmettre la requête via cloudflared → Wazuh","x":-232,"y":-80,"width":390,"height":60},
+		{"id":"00540a049aed2873","type":"text","text":"rediriger vers keycloak (OIDC Authorization Code Flow)","x":-232,"y":15,"width":450,"height":60},
+		{"id":"6956e761f287d0b5","type":"text","text":"Utilisateur se connecte sur keycloak\n(password + MFA keycloak)","x":-232,"y":120,"width":315,"height":80},
+		{"id":"9a03ae6746cc00bb","type":"text","text":"Cloudflare reçoit l'id_token\nValide les claims (email, groups)\nCrée un JWT Cloudflare signé (cookie 8h)","x":-232,"y":260,"width":352,"height":100},
+		{"id":"7012dbb0e7360363","type":"text","text":"Requête transmise au service ✅","x":-232,"y":420,"width":297,"height":60}
 	],
 	"edges":[
 		{"id":"94a095898da53f0b","fromNode":"94ff349fcde3d0b9","fromSide":"right","toNode":"ab1d0f3404b18274","toSide":"left"},

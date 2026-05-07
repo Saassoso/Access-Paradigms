@@ -6,20 +6,20 @@ statut: actif
 > Décrit l'architecture réelle déployée sur `charif-labs.tech`.
 ## Stack en un coup d'oeil
 
-| Couche | Outil | Rôle | Phase |
-|---|---|---|---|
-| Firewall L3/L7 | [[OPNsense]] + Zenarmor | VLANs, isolation zero-trust | ✅ Phase 0 |
-| ZTNA Ingress | [[Cloudflare]] Tunnel | Exposition sans port ouvert | ✅ Phase 0 |
-| IaC | [[Terraform]] + [[Ansible]] | Infra + config | ✅ Phase 0 |
-| IdP central | [[Authentik]] (→ [[Keycloak]] Phase 5) | SSO, MFA, OIDC, SAML | 🔄 Phase 1 |
-| SP Windows — Bureau-2 | [[Entra ID]] | Entra Join + PHS | Phase 2 |
-| SP Windows — Bureau-1 | GCPW (Google) | Google Credential Provider | Phase 2 |
-| RMM + Patching | [[Action1]] | Onboarding, scripts, LAPS | Phase 2 |
-| Config Management | [[Ansible]] | CIS hardening, Wazuh deploy | Phase 2 |
-| SIEM / XDR | [[Wazuh]] | Détection, FIM, SCA CIS | Phase 3 |
-| SOAR | [[n8n]] | IAM sync + offboarding automatisé | Phase 4 |
-| IA Logs | LLM (Claude Haiku / Ollama) | Analyse Wazuh — mode consultatif | Phase 4 |
-| Métriques | Prometheus + Grafana | Observabilité | Phase 5+ |
+| Couche                | Outil                       | Rôle                              | Phase     |
+| --------------------- | --------------------------- | --------------------------------- | --------- |
+| Firewall L3/L7        | [[OPNsense]] + Zenarmor     | VLANs, isolation zero-trust       | ✅ Phase 0 |
+| ZTNA Ingress          | [[Cloudflare]] Tunnel       | Exposition sans port ouvert       | ✅ Phase 0 |
+| IaC                   | [[Terraform]] + [[Ansible]] | Infra + config                    | ✅ Phase 0 |
+| IdP central           | [[Keycloak]]                | SSO, MFA, OIDC, SAML              | ✅ Phase 1 |
+| SP Windows — Bureau-2 | [[Entra ID]]                | Entra Join + PHS                  | ✅Phase 2  |
+| SP Windows — Bureau-1 | GCPW (Google)               | Google Credential Provider        | Phase 2   |
+| RMM + Patching        | [[Action1]]                 | Onboarding, scripts, LAPS         | Phase 2   |
+| Config Management     | [[Ansible]]                 | CIS hardening, Wazuh deploy       | ✅Phase 2  |
+| SIEM / XDR            | [[Wazuh]]                   | Détection, FIM, SCA CIS           | ✅Phase 3  |
+| SOAR                  | [[n8n]]                     | IAM sync + offboarding automatisé | Phase 4   |
+| IA Logs               | LLM (Claude Haiku / Ollama) | Analyse Wazuh — mode consultatif  | Phase 4   |
+| Métriques             | Prometheus + Grafana        | Observabilité                     | Phase 5+  |
 
 ## Topologie réseau
 ![Topologie réseau](Network%20topologie.canvas)
@@ -66,7 +66,7 @@ Utilisateur (VLAN 20 — Windows 11)
 [Cloudflare Access] — PEP — intercepte
     │ redirect OIDC
     ▼
-[Authentik/Keycloak] — IdP/PDP — authentifie + claims
+[Keycloak] — IdP/PDP — authentifie + claims
     │ SSO silencieux (cookie Google ou PRT Microsoft)
     │
     ├── OIDC → Portainer, Wazuh, Grafana, Vault

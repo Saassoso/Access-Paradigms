@@ -36,7 +36,7 @@ Daemon : `cloudflared` dans Docker
 Provisioning : [[../../Terraform]] (tunnel UUID + CNAME records)
 
 Services exposés :
-- `auth.charif-labs.tech` → authentik-server:9000
+- `auth.charif-labs.tech` → keycloak-server:9000
 - `wazuh.charif-labs.tech` → wazuh-dashboard:443
 - `trmm.charif-labs.tech` → tactical-rmm:443
 - `n8n.charif-labs.tech` → n8n:5678

@@ -3,9 +3,7 @@ tags:
   - tâche
   - phase-1
   - identité
-  - authentik
 outils:
-  - Authentik
   - Docker
 concepts:
   - OIDC Flow
@@ -14,19 +12,16 @@ statut: Done
 ---
 ## Contexte
 
-Déploiement de l'IdP central. Authentik remplace Google Workspace comme fournisseur d'identité.
-
+Déploiement de l'IdP central. 
+- Keycloak remplace Workspace et Entra comme fournisseur d'identité.
 ## Étapes complétées
 
 ### 1. Variables d'environnement
 
 ```bash
-# docker/core-identity/authentik/.env
-AUTHENTIK_SECRET_KEY=$(openssl rand -hex 32)
-PG_PASS=$(openssl rand -hex 16)
-PG_USER=authentik
-PG_DB=authentik
-AUTHENTIK_TAG=2024.2.4
+# docker/core-identity/keyclaok/.env
+
+
 ```
 
 ### 2. Docker Compose
@@ -41,17 +36,17 @@ docker compose ps  # tous healthy
 
 URL : `https://auth.charif-labs.tech/if/flow/initial-setup/`  
 Compte admin : `akadmin` + mot de passe fort
-![](images/Authentik.png)
+
 ### 4. Structure organisationnelle
 
-Authentik → Directory → Groups → Create
+keycloak → Directory → Groups → Create
 
 ```
 Groupe: basique    (utilisateurs VLAN 20 Bureau 1)
 Groupe: admins     (utilisateurs VLAN 20 Bureau 2)
 ```
 
-Authentik → Directory → Users → Create (3 utilisateurs)
+keycloak → Directory → Users → Create (3 utilisateurs)
 - `user-basic-01` → groupe basique
 - `user-admin-01` → groupe admins
 - `breakglass` → groupe admins (compte d'urgence)
@@ -66,7 +61,7 @@ root
 - Unités Organisationnelles (Folders)
 Dossier : `Bureau1`
 Dossier : `Bureau2`
-le troisien deja exsitant `authentik admins` 
+le troisien deja exsitant `keycloak admins` 
 - Groupes
 Groupe : `basique` (Rattaché à l'OU `Bureau1`)
 Groupe : `admins` (Rattaché à l'OU `Bureau2`)
@@ -74,7 +69,7 @@ Groupe : `admins` (Rattaché à l'OU `Bureau2`)
 user-basic-01 : GP= `basique`, Dir= Bureau1,, Rules= 
 user-admin-01 : GP= `admins`, Dir=Bureau2 , Rules= 
 breakglass : GP= `admins`, Dir=Bureau2 , Rules= 
-akadmin : GP= authentik Admins, Dir= users , Roles= 
+akadmin : GP= keycloak Admins, Dir= users , Roles= 
 ## Prochaines étapes (Phase 1 en cours)
 
 - [ ] Configurer Provider OIDC pour Cloudflare Access — voir [[2 - Federation OIDC Entra ID]]

@@ -11,10 +11,10 @@ statut: ❌ À faire
 ---
 ## Prérequis Phase 2
 
-- [ ] Phase 1 validée (Keycloak SSO fonctionnel)
-- [ ] Compte Action1 créé + DPA signé
-- [ ] Pour Bureau-1 : Google Cloud Identity tenant validé
-- [ ] Pour Bureau-2 : Entra ID en mode Managed (PHS)
+- [x] Phase 1 validée (Keycloak SSO fonctionnel)
+- [x] Compte Action1 créé + DPA signé
+- [x] Pour Bureau-1 : Google Cloud Identity tenant validé
+- [x] Pour Bureau-2 : Entra ID en mode Managed (PHS)
 
 ---
 ## 2.A — Bureau-2 : Entra ID + Entra Join (Mode Managed / PHS)

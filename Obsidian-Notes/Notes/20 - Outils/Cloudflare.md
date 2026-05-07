@@ -26,7 +26,7 @@ Comprend [[Zero Trust Tunnel]] et [[DNS Delegation]] avant de configurer.
 ## Tunnel — architecture Docker
 
 Le daemon `cloudflared` tourne dans Docker, connecté au réseau `sovereign_net`.  
-Il résout les services par leur nom Docker (ex: `authentik-server`).
+Il résout les services par leur nom Docker (ex: `keycloak-server`).
 
 ```yaml
 # docker/cloudflared/docker-compose.yml
@@ -48,7 +48,7 @@ Ne jamais stocker dans un fichier `.tfvars` commité.
 ## Ingress rules (ingress.tf)
 
 ```hcl
-ingress_rule { hostname = "auth.charif-labs.tech"  service = "http://authentik-server:9000" }
+ingress_rule { hostname = "auth.charif-labs.tech"  service = "http://keycloak-server:9000" }
 ingress_rule { hostname = "wazuh.charif-labs.tech" service = "https://wazuh-dashboard:443" }
 ingress_rule { service = "http_status:404" }  # catch-all obligatoire
 ```

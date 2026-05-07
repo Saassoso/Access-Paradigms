@@ -30,8 +30,8 @@ statut: actif
 - [[JWT]] — structure Header.Payload.Signature, inspecter sur jwt.io
 
 ### Outils
-- [[../20 - Outils/Authentik]] — providers OIDC/SAML, flows, OUs, Outposts
-- [[../20 - Outils/Cloudflare]] — cloudflared daemon, ingress rules, CNAME proxifié
+- [[Keycloak]] — providers OIDC/SAML, flows, OUs, Outposts
+- [[Cloudflare]] — cloudflared daemon, ingress rules, CNAME proxifié
 - [[Zero Trust Tunnel]] — le concept derrière Cloudflare Tunnel
 
 ## Phase 2 — Endpoints Windows
@@ -54,5 +54,4 @@ statut: actif
 ## Phase 5 — Observabilité
 
 - Prometheus — pull-based, types de métriques, labels, PromQL de base
-- WireGuard — cryptokey routing, mesh topology, wg0.conf
 - Grafana — datasources, panels, provisioning as code

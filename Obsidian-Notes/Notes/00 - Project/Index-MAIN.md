@@ -20,17 +20,17 @@ version: "3.2"
 ---
 ## Phases du Projet — Ordre d'Exécution
 
-| Phase | Contenu                                                       | Priorité              | Statut      |
-| ----- | ------------------------------------------------------------- | --------------------- | ----------- |
-| **0** | [[Phase-0-Infrastructure]] — Réseau, VLANs, DNS               | Fondation             | ✅ Complété  |
-| **1** | [[Phase-1-Identity-Keycloak]] — IdP Keycloak, SSO fonctionnel | **FAIRE FONCTIONNER** | 🔄 En cours |
-| **2** | [[Phase-2-Endpoints-Windows]] — Login Windows GCPW + Entra    | **FAIRE FONCTIONNER** | ❌ À faire   |
-| **3** | [[Phase-3-Wazuh-SIEM]] — Monitoring de base                   | **FAIRE FONCTIONNER** | ❌ À faire   |
-| **4** | [[Phase-4-SOAR-n8n]] — Automatisation IAM + offboarding       | **FAIRE FONCTIONNER** | ❌ À faire   |
-| **5** | [[Phase-5-HA]] — Haute Disponibilité                          | HA                    | ❌ Futur     |
-| **6** | [[Phase-6-DevSecOps]] — Pipeline CI/CD sécurisé               | DevSecOps             | ❌ Futur     |
-| **7** | [[Phase-7-k3s]] — Migration Kubernetes                        | Infra avancée         | ❌ Futur     |
-| **8** | [[Phase-8-Cloud-DigitalOcean]] — Extension hybride            | Scale                 | ❌ Futur     |
+| Phase | Contenu                                                       | Priorité              | Statut     |
+| ----- | ------------------------------------------------------------- | --------------------- | ---------- |
+| **0** | [[Phase-0-Infrastructure]] — Réseau, VLANs, DNS               | Fondation             | ✅          |
+| **1** | [[Phase-1-Identity-Keycloak]] — IdP Keycloak, SSO fonctionnel | **FAIRE FONCTIONNER** | ✅          |
+| **2** | [[Phase-2-Endpoints-Windows]] — Login Windows GCPW + Entra    | **FAIRE FONCTIONNER** | ✅ MS:Entra |
+| **3** | [[Phase-3-Wazuh-SIEM]] — Monitoring de base                   | **FAIRE FONCTIONNER** | ✅          |
+| **4** | [[Phase-4-SOAR-n8n]] — Automatisation IAM + offboarding       | **FAIRE FONCTIONNER** | ❌ À faire  |
+| **5** | [[Phase-5-HA]] — Haute Disponibilité                          | HA                    | ❌ Futur    |
+| **6** | [[Phase-6-DevSecOps]] — Pipeline CI/CD sécurisé               | DevSecOps             | ❌ Futur    |
+| **7** | [[Phase-7-k3s]] — Migration Kubernetes                        | Infra avancée         | ❌ Futur    |
+| **8** | [[Phase-8-Cloud-DigitalOcean]] — Extension hybride            | Scale                 | ❌ Futur    |
 
 ---
 ## Architecture de Référence

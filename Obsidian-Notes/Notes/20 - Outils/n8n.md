@@ -9,7 +9,7 @@ concepts: []
 
 SOAR (Security Orchestration, Automation & Response). Transforme les alertes passives en réponses actives automatisées.
 
-Reçoit des webhooks de [[Wazuh]], orchestre des appels API vers [[Action1]] et [[Authentik]], envoie des notifications.
+Reçoit des webhooks de [[Wazuh]], orchestre des appels API vers [[Action1]] et [[keycloak]], envoie des notifications.
 
 ## Déploiement
 
@@ -35,7 +35,7 @@ if (signature !== expected) throw new Error('Invalid HMAC signature');
 ```
 Webhook (payload JSON employé)
     → Validation HMAC
-    → Authentik API : suspend user
+    → keycloak API : suspend user
     → Action1 API : rotate LAPS
     → Action1 API : disable NIC
     → Email notification + horodatage

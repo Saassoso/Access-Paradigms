@@ -1,6 +1,6 @@
 | Composant         | Rôle IAM explicite                                            |
 | ----------------- | ------------------------------------------------------------- |
-| Authentik         | IdP — PDP central — émet les assertions d'identité            |
+| keycloak          | IdP — PDP central — émet les assertions d'identité            |
 | Cloudflare Access | PEP — applique les décisions d'accès à l'edge                 |
 | n8n               | Moteur JML — automatise les transitions Joiner/Mover/Leaver   |
 | Action1           | Enforcement sur le device — étend le PEP jusqu'à l'endpoint   |

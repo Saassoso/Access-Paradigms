@@ -72,16 +72,16 @@ docker compose up -d cloudflared
 docker compose logs cloudflared  # vérifier "Connected to Cloudflare"
 ```
 
-### 8. Déployer Authentik
+### 8. Déployer keycloak
 
 ```bash
-docker volume create authentik_database
-docker volume create authentik_redis
+docker volume create keycloak_database
+docker volume create keycloak_redis
 cd docker/core-identity/
 docker compose up -d
 ```
 
-Vérifier : `https://auth.charif-labs.tech` → page de login Authentik 
+Vérifier : `https://auth.charif-labs.tech` → page de login keycloak 
 
 ## Validation 
 
@@ -92,7 +92,7 @@ docker compose logs cloudflared | grep "Connected"
 # DNS propagé
 dig auth.charif-labs.tech CNAME
 
-# Authentik accessible
+# keycloak accessible
 curl -I https://auth.charif-labs.tech
 ```
 

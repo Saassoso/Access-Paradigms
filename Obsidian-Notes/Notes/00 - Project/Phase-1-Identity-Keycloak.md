@@ -107,12 +107,13 @@ JWKS URL     : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-
 ### Policies Access par service
 ![](images/Phase-1-Identity-Keycloak-8.png)
 
-| Service        | Domaine                    | Groupe requis |
-| -------------- | -------------------------- | ------------- |
-| Keycloak Admin | auth.charif-labs.tech      | bureau-2-it   |
-| Wazuh          | wazuh.charif-labs.tech     | bureau-2-it   |
-| n8n            | n8n.charif-labs.tech       | bureau-2-it   |
-| Portainer      | portainer.charif-labs.tech | bureau-2-it   |
+| Service         | Domaine                    | Groupe requis |
+| --------------- | -------------------------- | ------------- |
+| Keycloak        | auth.charif-labs.tech      | Any user      |
+| Wazuh           | wazuh.charif-labs.tech     | bureau-2-it   |
+| n8n             | n8n.charif-labs.tech       | bureau-2-it   |
+| Portainer       | portainer.charif-labs.tech | bureau-2-it   |
+| Keyacloak Admin |                            |               |
 
 ---
 ## 1.3 — Portainer
@@ -219,10 +220,9 @@ Install-Module Microsoft.Graph -Force -AllowClobber
 Connect-MgGraph -Scopes "Domain.ReadWrite.All"
 Update-MgDomain -DomainId "ms.charif-labs.tech" -AuthenticationType "Managed"
 ```
-#####
+
 #### Keycloak :
 Descendez dans les paramètres de l'Identity Provider :
-
 
 - **Trust Email :** `On` _(Évite de demander à l'utilisateur de valider son email après l'import)._
 - **Sync Mode :** `Import` _(Crée une copie locale de l'utilisateur dans la base Keycloak à la première connexion)._

@@ -7,7 +7,7 @@ concepts: [IaC]
 ---
 ## Rôle dans ce projet
 Tous les services du plan de gestion tournent dans Docker sur le Docker Host (10.0.10.2) :
-Authentik, cloudflared, Wazuh, n8n, Grafana, Prometheus, Uptime Kuma.
+keycloak, cloudflared, Wazuh, n8n, Grafana, Prometheus, Uptime Kuma.
 ## Installation sur Ubuntu 24.04
 
 ```bash
@@ -35,7 +35,7 @@ networks:
     external: true  # référence le réseau existant
 ```
 
-Grâce à ce réseau partagé, `cloudflared` résout `authentik-server` par son nom de conteneur.
+Grâce à ce réseau partagé, `cloudflared` résout `keycloak-server` par son nom de conteneur.
 ## Règle critique — OpenSearch RAM
 
 ```yaml
@@ -45,11 +45,11 @@ opensearch:
 ```
 Sans ce cap, OpenSearch consomme 4+ Go et crashe le PC.
 ## Volumes nommés externes
-Les données persistantes (PostgreSQL Authentik, Wazuh indices) utilisent des volumes nommés déclarés comme `external: true` pour survivre aux `docker compose down`.
+Les données persistantes (PostgreSQL keycloak, Wazuh indices) utilisent des volumes nommés déclarés comme `external: true` pour survivre aux `docker compose down`.
 ```bash
 # Créer avant le premier démarrage
-docker volume create authentik_database
-docker volume create authentik_redis
+docker volume create keycloak_database
+docker volume create keycloak_redis
 ```
 ## Commandes courantes
 ```bash

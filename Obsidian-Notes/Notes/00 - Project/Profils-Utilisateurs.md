@@ -109,7 +109,7 @@ Utilisateur (VLAN 20)
 > Le rapport précédent affirmait que Keycloak est le SSOT absolu, mais les utilisateurs se connectent à Windows via Google ou Entra, pas via Keycloak.
 
 **C'est correct et intentionnel :**
-- Keycloak/Keycloak = SSOT pour la **gestion** des identités (créer, modifier, révoquer)
+- Keycloak = SSOT pour la **gestion** des identités (créer, modifier, révoquer)
 - Google/Entra = SSOT pour la **vérification locale** des credentials Windows (résilience)
 - Si Keycloak tombe, les utilisateurs peuvent encore se connecter à leur PC (pas de SPOF pour le login Windows)
 - Si Keycloak tombe, les accès aux outils internes (Portainer, Wazuh…) sont bloqués par Cloudflare Access → bonne chose
