@@ -95,7 +95,7 @@ Copier le `Client Secret` depuis l'onglet **Credentials**.
 
 Access in terraform 
 - add zero trust to api key {Account > Zero Trust > Edit}
-- [[Notes - to Remember]]
+- [[../Notes - to Remember]]
 ```
 Name         : Keycloak
 Client ID    : cloudflare-access
