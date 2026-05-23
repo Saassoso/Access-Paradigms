@@ -12,7 +12,7 @@ it says **Federated** and you want to convert it to Managed, you must use Micros
 Install-Module Microsoft.Graph -Scope CurrentUser
 Connect-MgGraph -Scopes "Domain.ReadWrite.All"
 # Convert the domain back to Managed
-Update-MgDomain -DomainId "charif-labs.tech" -IsAdminManaged $true
+Update-MgDomain -DomainId "ms.charif-labs.tech" -AuthenticationType "Managed"
 ```
 ![](images/Task%20Entra%20Join%20&%20Managed%20Domain%20Test%20(Bureau-2%20VM).png)
 - [x] **Prep the VM:** Boot up the `Bureau-2` Windows 10/11 VM.
