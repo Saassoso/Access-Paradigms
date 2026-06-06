@@ -134,36 +134,39 @@ The core problem it solves is preventing single-alert false positive responses. 
                              │         │       Enforce score/action consistency  │
                              │         └────────┬──────────────────────────────┘
                              │                  │
-                             │   ┌──────────────▼──────────────────────────────┐
-  STAGE 4                    │   │  [16] Action Router (Switch)                 │
-                             │   │       on assessment.action                  │
-                             │   └─────┬───────────┬────────────┬──────────────┘
-                             │      IGNORE      INVESTIGATE    ISOLATE    (fallback)
-                             │         │             │             │            │
-                             │    [17] Log &   [18] INVESTIGATE  [19] Validate  [20] Fallback
-                             │    Suppress      Email           Preconditions   Error
-                             │         │             │                  │
-                             │         │             │             ⚠ Bug: see §9
-                             │         │             │             [21] HTTP PUT
-                             │         │             │             active-response
-                             │         │             │                  │
-                             │         │             │             [22] Parse AR
-                             │         │             │                  │
-                             │         └─────────────┴──────────────────┘
-                             │                        │
-                             │               ┌────────▼──────────────────────────┐
-                             │               │  [23] Send an Email1               │
-                             │               │       Unified notification         │
-                             │               └────────┬──────────────────────────┘
-                             │                        │
-                             │               ┌────────▼──────────────────────────┐
-                             │               │  [24] Master Audit Log (Code)      │
-                             │               └────────┬──────────────────────────┘
-                             │                        │
-                             └────────────── ┌────────▼──────────────────────────┐
-                                             │  [25] Send To OpenSearch           │
-                                             │       POST soar-audit-logs/_doc   │
-                                             └───────────────────────────────────┘
+                             │   ┌──────────────▼──────────────┐
+	STAGE 4				      │	  │ [16] Action Router (Switch) │
+                             │   └─────┬──────────┬─────────┬──┘
+                             │      IGNORE   INVESTIGATE  ISOLATE
+                             │         │          │         │
+                             │    [17] Log &      │    [19] Validate
+                             │    Suppress        │    Preconditions
+                             │         │          │         │
+                             │         │          │    [19b] If (Blocked?)
+                             │         │          │      ├── TRUE ──┐
+                             │         │          │      └── FALSE  │
+                             │         │          │           │     │
+                             │         │          │    [20] HTTP PUT│
+                             │         │          │    active-resp  │
+                             │         │          │           │     │
+                             │         │          │    [21] Parse AR│
+                             │         │          │           │     │
+                             │         └──────────┼───────────┘     │
+                             │                    │                 │
+                             │           ┌────────▼─────────┐       │
+                             │           │ [18/23] Unified  │◄──────┘
+                             │           │ SOC Emails       │
+                             │           └────────┬─────────┘
+                             │                    │
+                             │           ┌────────▼─────────┐
+                             │           │ [24] Master Audit│
+                             │           │ Log (Code)       │
+                             │           └────────┬─────────┘
+                             │                    │
+                             └────────── ┌────────▼─────────┐
+                                         │ [25] Send To     │
+                                         │ OpenSearch (SSL) │
+                                         └──────────────────┘
 ```
 
 ---
@@ -250,11 +253,9 @@ Implements a stateful, in-process TTL cache using `$getWorkflowStaticData('globa
 **Type:** `n8n-nodes-base.if`
 
 Checks `$json.dedup.isDuplicate === true`.
-
-- **TRUE branch (out0):** No connection — alert is silently dropped. The webhook already responded `200 OK` at Node 1.
+- **TRUE branch (out0):** Routes to a **Simple Code** node which creates a structured `alert_suppressed_dedup` log entry in the n8n console, capturing the deduplication key and time since last seen. The pipeline stops here.
+    
 - **FALSE branch (out1):** Proceeds to Stage 2 enrichment.
-
-> ⚠️ See [Bug #1](#bug-1-no-response-to-webhook-on-duplicate--minor) — the TRUE branch has no explicit suppression log.
 
 ---
 
@@ -270,13 +271,14 @@ Fetches OpenSearch credentials from Vault at path `n8n/soar/wazuh_indexer` (KV v
 ### [Node 6] Parse Vault Response
 **Type:** `n8n-nodes-base.code`
 
-Merges Vault credentials into the alert data object and pre-computes a Base64-encoded `Basic` auth header for all OpenSearch API calls, avoiding repeated encoding downstream.
+Merges Vault credentials into the alert data object and pre-computes a Base64-encoded Basic auth header for all OpenSearch API calls.
 
 ```javascript
 basicAuth: 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
 ```
 
 Also re-attaches the full alert data carried from the Deduplication Cache node via a node reference (`$('Deduplication Cache').first().json`).
+**Resilience Logic:** This node implements a `try...catch` block. If HashiCorp Vault is sealed, offline, or returns invalid data, the node prevents a catastrophic pipeline crash. Instead, it logs the error and gracefully passes a `vault_error: true` flag down the pipeline.
 
 ---
 
@@ -302,7 +304,7 @@ The core enrichment request. Posts an aggregation query to `wazuh-alerts-*/_sear
 | `unique_source_ips` | Cardinality of distinct source IPs |
 | `max_severity` | Highest rule level seen in the window |
 
-> ⚠️ **Critical Bug:** The `bool.must` filter currently uses `term: { "rule.id": ... }` instead of `term: { "agent.name": ... }`. This means the query returns how many times this *specific rule* fired across *all agents*, not the *total alert volume for the triggering host*. See [Bug #2](#bug-2-opensearch-query-filters-by-ruleid-instead-of-agentname--critical) — this is the most impactful issue in the workflow.
+**Filter Logic:** Accurately filters the historical window by `agent.name` to calculate the total alert volume and severity distributions specific to the compromised endpoint.
 
 ---
 
@@ -426,14 +428,14 @@ llmOutput.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/,
 ```
 
 **2. Hard parse failure fallback:**
-If `JSON.parse` throws, the node defaults to `action: 'INVESTIGATE'`, `risk_score: 50`, `confidence: 'LOW'`, and logs the raw LLM output for debugging.
+If the LLM output is invalid or times out, the fallback mechanism calculates a safe risk score directly from the original Wazuh rule level (`(ruleLevel / 15) * 100`). It defaults to `ISOLATE` for Level 12+ alerts and `INVESTIGATE` for all others, ensuring critical alerts are never downgraded by an AI timeout.
 
 **3. Action/score consistency enforcement:**
 ```
 ISOLATE + risk_score < 75  →  downgrade to INVESTIGATE
 IGNORE  + risk_score > 30  →  upgrade to INVESTIGATE
 ```
-This prevents a hallucinated mismatch (e.g., LLM outputs `"action": "ISOLATE"` with `"risk_score": 40`) from triggering a destructive action.
+Prevents hallucinated mismatches(e.g., `ISOLATE` with a score of 40 is downgraded to `INVESTIGATE`).
 
 ---
 
@@ -477,7 +479,7 @@ This email is sent in addition to the unified `Send an Email1` node that the INV
 ### [Node 19] Validate Preconditions
 **Type:** `n8n-nodes-base.code` (ISOLATE path — Safety Gate)
 
-A hard safety gate that runs before any active response fires. It checks three blocking conditions:
+A hard safety gate that runs before any active response fires. It checks three blocking conditions (Infrastructure blocklist, Manager self-isolation, Low-evidence isolation).
 
 | Check | Block Condition |
 |---|---|
@@ -487,7 +489,7 @@ A hard safety gate that runs before any active response fires. It checks three b
 
 If any check fails, it sets `isolation_blocked: true` and downgrades `assessment.action` to `'INVESTIGATE'`.
 
-> ⚠️ **Critical Bug:** Despite setting `isolation_blocked: true`, the next connection always leads to the HTTP Request (active-response) node regardless. The blocked flag is not checked before the firewall-drop fires. See [Bug #4](#bug-4-validate-preconditions-block-is-never-enforced--critical).
+The subsequent **If** node evaluates this flag. If blocked, it safely aborts the firewall modification and routes the alert to the **INVESTIGATE** email path for human review.
 
 ---
 
@@ -532,12 +534,13 @@ All three terminal action branches (IGNORE, INVESTIGATE, ISOLATE) converge at a 
 ### [Node 23] Send an Email1
 **Type:** `n8n-nodes-base.emailSend`
 
-A unified notification email sent for all non-fallback outcomes. The email header color is dynamically set based on `assessment.action`:
-- `ISOLATE` → Red (`#ef4444`)
-- `INVESTIGATE` → Amber (`#f59e0b`)
-- Other → Blue (`#3b82f6`)
+A unified notification email sent for all non-fallback outcomes. 
+- The email header color is dynamically set based on `assessment.action`:
+	- `ISOLATE` → Red (`#ef4444`)
+	- `INVESTIGATE` → Amber (`#f59e0b`)
+	- Other → Blue (`#3b82f6`)
 
-For ISOLATE outcomes, the email body includes a banner: `🚨 ACTIVE RESPONSE TRIGGERED: Firewall Drop executed against IP <srcIp>`.
+**Dynamic Subject Line:** Uses `=🚨 [SOC Alert] Action: {{ $json.assessment.action }} | {{ $json.normalized?.ruleDesc || 'Unknown Rule Triggered' }}` to accurately reflect the incident.
 
 ---
 
@@ -568,10 +571,9 @@ Assembles a canonical audit log record from all available pipeline data:
 
 Indexes the master audit record into a dedicated `soar-audit-logs` index in OpenSearch via `POST /soar-audit-logs/_doc`. Uses the same indexer credentials from the Parse Vault Response node (referenced directly).
 
-> ⚠️ **Minor issue:** Unlike the OpenSearch Historical Query node, this node does not set `allowUnauthorizedCerts: true`. If the OpenSearch indexer uses a self-signed certificate, this write will fail with an SSL error. See [Bug #5](#bug-5-send-to-opensearch-missing-ssl-bypass--minor).
+- **Security:** Successfully configured with `allowUnauthorizedCerts: true` to bypass self-signed certificate rejections from the internal Wazuh Indexer.
 
 ---
-
 ## 8. Fallback & Error Handling System
 
 The workflow includes a dedicated error-handling subsystem that activates when the Action Router produces an unroutable output (its `out3` fallback, meaning the LLM returned an action value that was not IGNORE, INVESTIGATE, or ISOLATE after all validation).
