@@ -12,9 +12,9 @@ statut: ❌ À faire
 
 ## Prérequis Phase 3
 
-- [ ] Phase 2 validée (endpoints Windows fonctionnels)
-- [ ] VM Docker Host : minimum **4 Go RAM** (2 Go pour OpenSearch)
-- [ ] ⚠️ **Point de synchronisation responsable** : notifier avant déploiement Wazuh agent
+- [x] Phase 2 validée (endpoints Windows fonctionnels)
+- [x] VM Docker Host : minimum **4 Go RAM** (2 Go pour OpenSearch)
+- [x] ⚠️ **Point de synchronisation responsable** : notifier avant déploiement Wazuh agent
 
 ---
 

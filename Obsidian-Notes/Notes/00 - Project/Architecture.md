@@ -18,7 +18,7 @@ statut: actif
 | Config Management     | [[Ansible]]                 | CIS hardening, Wazuh deploy       | ✅Phase 2  |
 | SIEM / XDR            | [[Wazuh]]                   | Détection, FIM, SCA CIS           | ✅Phase 3  |
 | SOAR                  | [[n8n]]                     | IAM sync + offboarding automatisé | Phase 4   |
-| IA Logs               | LLM (Claude Haiku / Ollama) | Analyse Wazuh — mode consultatif  | Phase 4   |
+| IA Logs               | LLM                         | Analyse Wazuh — mode consultatif  | Phase 4   |
 | Métriques             | Prometheus + Grafana        | Observabilité                     | Phase 5+  |
 
 ## Topologie réseau

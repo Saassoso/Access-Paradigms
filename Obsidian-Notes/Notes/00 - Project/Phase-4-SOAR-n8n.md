@@ -7,9 +7,9 @@ statut: ❌ À faire
 > **Objectif :** Provisioning automatique des comptes + offboarding multi-vecteur + analyse IA Wazuh.  
 > **Prérequis :** Wazuh opérationnel (Phase 3). Ne jamais automatiser ce qu'on ne comprend pas encore.
 ## Prérequis Phase 4
-- [ ] Phase 3 validée (Wazuh opérationnel, alertes visibles)
-- [ ] Attribut `action1_agent_id` renseigné pour chaque utilisateur dans Keycloak
-- [ ] Credentials API prêts (Graph, Google SDK, Action1)
+- [x] Phase 3 validée (Wazuh opérationnel, alertes visibles)
+- [x] Attribut `action1_agent_id` renseigné pour chaque utilisateur dans Keycloak
+- [x] Credentials API prêts (Graph, Google SDK, Action1)
 ---
 ## 4.1 — Déployer n8n
 
