@@ -12,7 +12,7 @@ SIEM/XDR open source. Centralise les logs, détecte les menaces, évalue la conf
 Flux principal : Sysmon (endpoint) → Agent Wazuh → Manager → Dashboard.
 
 ## Architecture
-![Wazuh Architecture](Canvas/Wazuh%20Architecture.canvas)
+![Wazuh Architecture](../99%20-%20Attachment/Canvas/Wazuh%20Architecture.canvas)
 ## Déploiement Docker — cap RAM obligatoire
 
 ```yaml

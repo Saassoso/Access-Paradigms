@@ -41,6 +41,6 @@ network:
       dhcp4: true
 ```
 #### Configuration
-![](images/1-docker-network.png)
+![](../99%20-%20Attachment/images/1-docker-network.png)
 #### Application de la configuration
 - `sudo netplan apply`

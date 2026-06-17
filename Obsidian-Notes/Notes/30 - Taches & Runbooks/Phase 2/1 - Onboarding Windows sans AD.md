@@ -116,4 +116,4 @@ La VM Windows doit être sur le réseau VLAN 20.
 - Ou dans le fichier `.vmx` : `ethernet0.vlan.id = "20"`
 #### Validation 
 - cmd : `ipconfig`
-![](../images/2026-03-09%2011_26_13-Windows%2011%20-%20VMware%20Workstation.png)
+![](../../99%20-%20Attachment/images/2026-03-09%2011_26_13-Windows%2011%20-%20VMware%20Workstation.png)

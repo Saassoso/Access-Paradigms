@@ -13,7 +13,7 @@ Pour exposer un service interne sur internet, la méthode classique = ouvrir un 
 
 Au lieu d'ouvrir des ports **en entrée**, on établit une connexion **sortante** depuis le serveur vers un edge provider (Cloudflare, Ngrok, Tailscale...). Le trafic entrant transite par cette connexion inversée.
 
-![Untitled](Canvas/ZTNA%20Tunnel.canvas)
+![Untitled](../99%20-%20Attachment/Canvas/ZTNA%20Tunnel.canvas)
 ## Comment ça fonctionne techniquement
 
 1. Le daemon `cloudflared` tourne sur le serveur

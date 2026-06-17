@@ -22,7 +22,7 @@ statut: actif
 | Métriques             | Prometheus + Grafana        | Observabilité                     | Phase 5+  |
 
 ## Topologie réseau
-![Topologie réseau](Network%20topologie.canvas)
+![Topologie réseau](../99%20-%20Attachment/Canvas/Network%20topologie.canvas)
 **Règle fondamentale** : 
 - VLAN 20 → VLAN 30 = BLOCK. 
 	- Les endpoints ne touchent jamais le plan de gestion.

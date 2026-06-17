@@ -15,7 +15,7 @@ On configure un Trunk 802.1Q (une seule interface) et on y tague les différents
 on chosis em0, l'interface WAN 
 - et N : pour refuser les LAGGs.
 - et N : Do you want to configure VLANs now?
-![](Notes/30%20-%20Taches%20&%20Runbooks/images/1-OPNsense.png)
+![](../99%20-%20Attachment/images/1-OPNsense.png)
 Assign interfaces : name
 - Trunk : Lan Segment ; em1 ;
 - Wan : NAT ; em0 ; 
@@ -32,7 +32,7 @@ Set interface IP address
 
 ### Access WebGUI
 Utiliser port forwarding over docker-host , ssh tunnel connection over terminus pour faire rebondir ton navigateur local :
-![](Notes/30%20-%20Taches%20&%20Runbooks/images/0-OPNsense.png)
+![](../99%20-%20Attachment/images/0-OPNsense.png)
 #### Configuration Reseau et du Tunnel dans [[Termius]]
 - [[Notes/40 - Reference/netplan]] : to configure the network of the docker host
 - `root` et le mot de passe `opnsense`
@@ -59,7 +59,7 @@ Utiliser port forwarding over docker-host , ssh tunnel connection over terminus 
 
 ### VLANs
 #### Creation du Tag 802.1Q : 20
-![](Notes/30%20-%20Taches%20&%20Runbooks/images/2-OPNsense.png)
+![](../99%20-%20Attachment/images/2-OPNsense.png)
 **Devices** -> **VLAN** -> **+** 
 ##### Renseigne _exclusivement_ les champs
 - **Parent interface :** Sélectionne l'interface Trunk, c'est-à-dire **`em1`** (elle sera probablement affichée sous la forme `em1 (adresse_mac) [LAN]`). Ne sélectionne surtout pas le WAN (`em0`).
@@ -69,7 +69,7 @@ Utiliser port forwarding over docker-host , ssh tunnel connection over terminus 
 Then Click **Apply**
 ##### Assignation Logique (Couche L3)
 Interfaces > Assignments -> **New interface**. -> VLAN -> + -> OPTS
-![456](Notes/30%20-%20Taches%20&%20Runbooks/images/OPNsense.png)
+![456](../99%20-%20Attachment/images/OPNsense.png)
 ##### Configuration IP (Passerelle du VLAN)
 - Dans le menu de gauche, va dans **Interfaces** et clique sur **[VLAN20_Bureau]**.
 - **Enable :** Coche la case "Enable Interface" (sans cela, l'interface reste éteinte).
@@ -90,7 +90,7 @@ Le pare-feu possède l'adresse `10.0.20.1` sur ce réseau, il peut distribuer de
     - Cherche le code `3` (Routers) et mets `10.0.20.1`.
     - Cherche le code `6` (Domain Name Servers) et mets `1.1.1.1`.
 ### Routage dans pc 
-![](Notes/30%20-%20Taches%20&%20Runbooks/images/OPNsense-1.png)
+![](../99%20-%20Attachment/images/OPNsense-1.png)
 #### Test Vlans
 ##### Tagging 802.1Q (Dans l'OS Client)
 - `ip a` (ex: `ens33`).

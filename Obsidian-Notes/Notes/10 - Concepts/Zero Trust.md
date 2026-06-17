@@ -30,7 +30,7 @@ Modèle de sécurité qui abandonne le paradigme "faire confiance au réseau int
 Un VPN donne accès à tout le réseau interne après authentification. Zero Trust donne accès à **un seul service**, après vérification de l'identité **et** du contexte (device health, heure, localisation).
 
 ## Implémentation dans ce projet
-![Implementation](Canvas/Implementation.canvas)
+![Implementation](../99%20-%20Attachment/Canvas/Implementation.canvas)
 
 ## Référence
 

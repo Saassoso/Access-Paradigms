@@ -92,7 +92,7 @@ ansible windows -m win_ping
 			- error handling and state recognitions
 		- **Imperative** : step by step , flow with order of succeful operation 
 			- group and user maagment 
-![](images/Ansible.png)
+![](../99%20-%20Attachment/images/Ansible.png)
 
 _Jinja2_ templating to incorporate varibales to our output msg by evaluating threm 
 
@@ -101,9 +101,9 @@ Community-contributed roles and collections
 - Roles / Community / Tools / Time 
 - Efficient automation tasks
 - Create, publish, and share ansible roles
-![](images/Ansible-2.png)
+![](../99%20-%20Attachment/images/Ansible-2.png)
 #### Ansible release Lifecycle
-![](images/Ansible-3.png)
+![](../99%20-%20Attachment/images/Ansible-3.png)
 #### Introduction to ansible Galaxy
 Ecosystem of sharing
 - Roles 
@@ -236,7 +236,7 @@ systemctl status ntp
 
 ```
 #### Laucnh of ansible Core versions
-![](images/Ansible-1.png)
+![](../99%20-%20Attachment/images/Ansible-1.png)
 - 
 - collection freeze
 - Ansible community package
@@ -289,16 +289,16 @@ ansible-playbook paybook.yml --vault-id vault_file@/path/to/vault_passwordtxt
 ```
 
 - Commiting encrypted file to a repository : 
-![](images/Ansible-4.png)
+![](../99%20-%20Attachment/images/Ansible-4.png)
 #### Vault Access Management
 safeguarding vault pwd is crucial in teams
 - Verify the functionality of playbooks before any updates to encrypted content , to prevent potential down-times
-![](images/Ansible-5.png)- least privilege 
+![](../99%20-%20Attachment/images/Ansible-5.png)- least privilege 
 
 ### Introduction To LAMP Stack
 All in one web and server 
 - Integrates : Linux, Apache, MariaDB and PHP to create a web dev env
-![](images/Ansible-6.png)
+![](../99%20-%20Attachment/images/Ansible-6.png)
 - perrformace testing
 - ngnix reverse proxy : enhance performance through caching
 
@@ -320,7 +320,7 @@ sudo mysql_secure_installation
 
 ```
 
-![](images/Ansible-7.png)
+![](../99%20-%20Attachment/images/Ansible-7.png)
 
 use php with apacvhe
 ```
@@ -328,7 +328,7 @@ sudo apt install php libapache2-mod-php php-mysql
 ```
 
 ### Directory structure for chapter 04
-![](images/Ansible-8.png)
+![](../99%20-%20Attachment/images/Ansible-8.png)
 ```
 chapter04
 | cloud-init.yaml # cloud indtance init
@@ -378,4 +378,4 @@ Dynamically include varibale files dependenat on the operation system
 - name: "Include the operating system specific variables"
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml" ## repalced at runtime
 ```
-![](images/Ansible-9.png)
+![](../99%20-%20Attachment/images/Ansible-9.png)

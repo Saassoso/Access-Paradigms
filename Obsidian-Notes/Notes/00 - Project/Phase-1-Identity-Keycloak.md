@@ -31,7 +31,7 @@ Keycloak Admin → `charif-labs` realm → Groups :
 | `bureau-2-it` | Admins IT | 20 | Microsoft-Only |
 | `bureau-2-dev` | Développeurs | 20 | Microsoft-Only |
 | `bureau-2-compta` | Comptabilité | 20 | Microsoft-Only |
-![](images/Phase-1-Identity-Keycloak.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak.png)
 ### Rôles associés aux groupes
 
 Keycloak → Realm roles → créer puis assigner via Groups → Role Mappings :
@@ -39,23 +39,23 @@ Keycloak → Realm roles → créer puis assigner via Groups → Role Mappings :
 ```
 basic-user  → bureau-1
 ```
-![](images/Phase-1-Identity-Keycloak-1.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-1.png)
 ```
 it-admin    → bureau-2-it
 ```
-![](images/Phase-1-Identity-Keycloak-2.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-2.png)
 ```
 dev         → bureau-2-dev
 ```
-![](images/Phase-1-Identity-Keycloak-3.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-3.png)
 ```
 compta      → bureau-2-compta
 ```
-![](images/Phase-1-Identity-Keycloak-4.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-4.png)
 ### MFA TOTP obligatoire pour les admins
 
 Keycloak → Authentication → Required Actions → Configure OTP → Default Action : ON
-![](images/Phase-1-Identity-Keycloak-5.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-5.png)
 
 - Pour forcer uniquement sur certains groupes :
 ```
@@ -81,7 +81,7 @@ Client auth : ON (confidential)
 ```
 
 Onglet **Client scopes** → `cloudflare-access-dedicated` → Add mapper → Groups :
-![](images/Phase-1-Identity-Keycloak-6.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-6.png)
 ```
 Name            : groups
 Token Claim Name: groups
@@ -90,7 +90,7 @@ Add to userinfo : ON
 ```
 
 Copier le `Client Secret` depuis l'onglet **Credentials**.
-![](images/Phase-1-Identity-Keycloak-7.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-7.png)
 ### Dans Cloudflare Zero Trust Dashboard
 
 Access in terraform 
@@ -105,7 +105,7 @@ Token URL    : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-
 JWKS URL     : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/certs
 ```
 ### Policies Access par service
-![](images/Phase-1-Identity-Keycloak-8.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-8.png)
 
 | Service         | Domaine                    | Groupe requis |
 | --------------- | -------------------------- | ------------- |
@@ -156,7 +156,7 @@ Redirect URL     : https://portainer.charif-labs.tech/
 Logout URL       : https://auth.charif-labs.tech/realms/charif-labs/protocol/openid-connect/logout?client_id=portainer-sso&post_logout_redirect_uri=https://mgmt.charif-labs.tech
 Scopes           : openid email profile groups
 ```
-![](images/Phase-1-Identity-Keycloak-9.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-9.png)
 ### Cloudflare Tunnel → Portainer
 
 ```hcl
@@ -172,7 +172,7 @@ terraform apply
 curl -I https://mgmt.charif-labs.tech
 # Attendu : 302 → Cloudflare Access
 ```
-![](images/Phase-1-Identity-Keycloak-10.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-10.png)
 ---
 
 ## 1.4 — Identity Provider Microsoft (bouton "Se connecter avec Microsoft")
@@ -231,12 +231,12 @@ Descendez dans les paramètres de l'Identity Provider :
 	- Tells Entra what to show. Options: blank (Entra decides), `login` (always show Entra login screen), `none` (silent SSO only), `select_account`.
 ### Test
 Bouton "Se connecter avec Microsoft" visible sur `auth.charif-labs.tech` 
-![](images/Phase-1-Identity-Keycloak-11.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-11.png)
 → login `x@ms.charif-labs.tech` 
-![](images/Phase-1-Identity-Keycloak-12.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-12.png)
 
 → session Keycloak active ✅
-![](images/Phase-1-Identity-Keycloak-13.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-13.png)
 
 
 ---
@@ -299,10 +299,10 @@ Admin UI  : https://auth.charif-labs.tech/admin/charif-labs/console/
 ---
 
 ## Configure role based MFA 
-![](images/Phase-1-Identity-Keycloak-15.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-15.png)
 
 
-![](images/Phase-1-Identity-Keycloak-14.png)
+![](../99%20-%20Attachment/images/Phase-1-Identity-Keycloak-14.png)
 ## Validation Gatekeeper Phase 1
 
 ```bash

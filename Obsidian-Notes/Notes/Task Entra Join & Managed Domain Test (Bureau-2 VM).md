@@ -14,7 +14,7 @@ Connect-MgGraph -Scopes "Domain.ReadWrite.All"
 # Convert the domain back to Managed
 Update-MgDomain -DomainId "ms.charif-labs.tech" -AuthenticationType "Managed"
 ```
-![](images/Task%20Entra%20Join%20&%20Managed%20Domain%20Test%20(Bureau-2%20VM).png)
+![](99%20-%20Attachment/images/Task%20Entra%20Join%20&%20Managed%20Domain%20Test%20(Bureau-2%20VM).png)
 - [x] **Prep the VM:** Boot up the `Bureau-2` Windows 10/11 VM.
 - [ ] **Join Entra:** Navigate to **Settings > Accounts > Access work or school > Connect**.
 - [ ] Select **Join this device to Azure Active Directory**.

@@ -11,7 +11,7 @@ Transférer l'autorité de résolution d'une zone DNS à un autre serveur de nom
 
 ## Hiérarchie DNS
 
-![Hiérarchie DNS](Canvas/Hiérarchie%20DNS.canvas)
+![Hiérarchie DNS](../99%20-%20Attachment/Canvas/Hiérarchie%20DNS.canvas)
 ## Les enregistrements clés
 
 | Type | Rôle | Exemple dans ce projet |
@@ -46,4 +46,4 @@ nslookup -type=ns charif-labs.tech
 dig +trace auth.charif-labs.tech
 ```
 
-![](images/DNS%20Delegation.png)
+![](../99%20-%20Attachment/images/DNS%20Delegation.png)

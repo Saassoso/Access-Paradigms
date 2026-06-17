@@ -24,7 +24,7 @@ Remplace Authelia — même fonctionnalité, zéro service à déployer, zéro R
 Le dernier point est le seul argument pour Authelia. 
 Dans ce projet, tous les services sont déjà exposés exclusivement via Cloudflare Tunnel — si Cloudflare tombe, les services sont de toute façon inaccessibles de l'extérieur.
 ## Flux d'authentification
-![Flux d'authentification](Canvas/Flux%20d'authentification.canvas)
+![Flux d'authentification](../99%20-%20Attachment/Canvas/Flux%20d'authentification.canvas)
 ## Configuration dans Cloudflare Zero Trust
 ### 1. Configurer keycloak comme OIDC provider
 Zero Trust Dashboard → Settings → Authentication → Add Provider → OpenID Connect
