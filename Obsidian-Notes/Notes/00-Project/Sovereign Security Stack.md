@@ -3,7 +3,7 @@
 - **Identity-Centric Security:** Shifting from local/[[SAML]] accounts to a unified identity flow using **[[Phase 0/GCPW]] and **[[Phase 0/keycloak]]** as an [[OIDC]] broker to federate [[Google Cloud Identity]] and [[Microsoft Entra ID]].
 - **Layer 7 Perimeter:** Replacing pfSense with **[[Phase 0/OPNsense]] + [[../../Zenarmor]]** for application-level visibility, paired with **[[Phase 0/Cloudflare]] Tunnels** to eliminate inbound open ports.
 - **Automated Response:** Implementing event-driven workflows via **[[n8n]]** and **[[Wazuh]]** to achieve an automated "Hostile Offboarding" SLA of less than 5 seconds.
-- **Infrastructure as Code (IaC):** Standardizing deployment and configuration through **[[../../Terraform]]**, **[[Ansible]]**, and **[[Tactical RMM]]** to ensure "Zero-Touch" provisioning and CIS hardening.
+- **Infrastructure as Code (IaC):** Standardizing deployment and configuration through **[[../../Terraform]]**, **[[../20-Outils/Ansible]]**, and **[[Tactical RMM]]** to ensure "Zero-Touch" provisioning and CIS hardening.
 ### Le Flux de Télémétrie (XDR Multi-Cloud)
 L'objectif est d'avoir une visibilité totale sur les postes physiques et les environnements cloud.
 - **Ingestion Locale :** L'agent Wazuh, déployé sur l'Endpoint, remonte la configuration [[Sysmon ]](Event IDs 1, 3 et 10) pour analyser l'exécution des processus.
