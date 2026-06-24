@@ -24,7 +24,7 @@ Script bash — pas idempotent par défaut : "installer le paquet" (échoue si d
 Au lieu de modifier un serveur existant, on crée un nouveau serveur avec la config souhaitée et on détruit l'ancien. Simplifie le rollback.
 ## Les deux outils IaC de ce projet
 
-| | [[../../Terraform]] | [[Ansible]] |
+| | [[../../Terraform]] | [[../20-Outils/Ansible]] |
 |---|---|---|
 | Rôle | **Provisioning** — créer les ressources | **Configuration** — configurer ce qui existe |
 | Quand | Avant que la ressource existe | Après que la ressource existe |
