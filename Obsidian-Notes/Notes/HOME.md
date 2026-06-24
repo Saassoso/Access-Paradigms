@@ -2,14 +2,14 @@
 tags: [dashboard, navigation]
 ---
 
-# 🏠 Charif-Labs — Dashboard
+# Charif-Labs — Dashboard
 
 > **Stack :** Zero Trust Sovereign Infrastructure · `charif-labs.tech`  
 > **Principe :** Faire fonctionner → HA → DevSecOps → Scale
 
 ---
 
-## 📊 Avancement du Projet
+## Avancement du Projet
 
 | Phase | Nom                                         | Statut      |
 | ----- | ------------------------------------------- | ----------- |
@@ -25,7 +25,7 @@ tags: [dashboard, navigation]
 
 ---
 
-## 🚀 Prochaines Actions (Phase 2)
+## Prochaines Actions 
 
 - [x] Stocker Client Secret dans Vault (ou `.env` temporairement)
 - [x] Script `bootstrap_entra.ps1` : Entra Join + Action1 agent
@@ -37,7 +37,7 @@ tags: [dashboard, navigation]
 
 ---
 
-## 🗺️ Navigation
+## Navigation
 
 ### Projet
 - [[00-Project/Architecture|Architecture]] — Vue d'ensemble du stack
@@ -67,7 +67,7 @@ tags: [dashboard, navigation]
 
 ---
 
-## 🔑 Accès Rapide
+## Accès Rapide
 
 | Service | URL | Auth |
 |---|---|---|
@@ -78,7 +78,7 @@ tags: [dashboard, navigation]
 
 ---
 
-## 📐 Endpoints Keycloak
+## Endpoints Keycloak
 
 ```
 Discovery : https://auth.charif-labs.tech/realms/charif-labs/.well-known/openid-configuration
