@@ -8,6 +8,7 @@ Before Ansible can do anything, it needs to know *who* it is talking to.
 ```ini
 [docker_hosts]
 192.168.1.50 ansible_user=mgmt
+
 ```
 * **`[docker_hosts]`:** This is a group name. You can target a playbook to run on all servers under this group.
 * **`ansible_user`:** This tells Ansible exactly which user account to use when logging into the server via SSH.
@@ -23,6 +24,7 @@ Playbooks are the "master plans". They map your servers to specific roles.
   become: yes
   roles:
     - docker_applications
+
 ```
 
 * **`---`:** This simply indicates the start of a YAML file.
@@ -33,8 +35,11 @@ Playbooks are the "master plans". They map your servers to specific roles.
 
 ### 3. The Roles and Tasks (`ansible/roles/*/tasks/main.yml`)
 This is where the actual work happens. In your repository, you have roles like `linux_hardening` and `docker_engine`. Inside these roles are `tasks/main.yml` files.
-Tasks use **Ansible Modules**. Modules are built-in tools that do specific jobs (like copying files, installing packages, or starting services).
-Here is how Ansible magically copies your `docker/` folder from your laptop to the server without you doing it manually:
+
+Tasks use **Ansible Modules**. 
+- Modules are built-in tools that do specific jobs (like copying files, installing packages, or starting services).
+
+Ansible magically copies your `docker/` folder from your laptop to the server without you doing it manually:
 
 ```yaml
 - name: Copy Docker configuration files to the server
@@ -49,12 +54,10 @@ Here is how Ansible magically copies your `docker/` folder from your laptop to t
   community.docker.docker_compose:
     project_src: /home/mgmt/sovereign-stack/docker/1-foundation/
     state: present
+
 ```
 
 * **`ansible.builtin.copy`:** This is the copy module.
 * `src:` Looks at the files on your *local Windows laptop*.
 * `dest:` Pushes them over SSH to the *remote Linux server*.
 * **`community.docker.docker_compose`:** This module acts exactly like typing `docker compose up -d` in the terminal. It goes to the folder on the server and spins up the containers.
-
-
-Since you are transitioning to using Portainer to handle the actual container deployments, you will primarily only need to use the `linux_hardening` and `docker_engine` roles for future servers. Would you like to look at how your `linux_hardening` tasks are securing your host's firewall?
