@@ -58,7 +58,7 @@ Utilisateur (VLAN 20)
 ### Mover (Changement de poste)
 ```
 1. Admin modifie le groupe dans Keycloak
-   ⚠️ Si changement de profil (bureau-1 → bureau-2) :
+     Si changement de profil (bureau-1 → bureau-2) :
    → Offboarder l'ancien satellite (désactiver Google OU Entra)
    → Onboarder le nouveau satellite (créer Entra OU Google)
 2. Les rôles Cloudflare Access sont mis à jour au prochain login
@@ -69,7 +69,7 @@ Utilisateur (VLAN 20)
 ```
 1. Désactiver dans Keycloak → webhook → n8n
 2. Révoquer satellite (Google suspend OU Entra disable + revokeTokens)
-3. ⚠️ Rotation LAPS via Action1 (PENDANT que réseau encore actif)
+3. Rotation LAPS via Action1 (PENDANT que réseau encore actif)
 4. Confirmer rotation LAPS (GET /jobs/{job_id})
 5. Désactiver NIC via Action1 (réseau coupé EN DERNIER)
 6. Wazuh : confirmer 0 login post-timestamp d'offboarding
