@@ -13,14 +13,14 @@ By utilizing a **Two-Phase Bootstrap** methodology, we eliminate the "Firewall L
 
 ---
 
-## 🛑 The "Lockout Loop" Problem
+## The "Lockout Loop" Problem
 If an Ansible playbook attempts to install Tailscale *and* lock down the SSH firewall to the Tailscale subnet (`100.64.0.0/10`) in a single run over the public internet, it creates a race condition:
 1. Ansible connects via the public IP.
 2. The firewall applies the strict subnet rule.
 3. The firewall instantly terminates the active public IP connection (`Connection reset by peer`) before Ansible can finish.
 4. The server becomes unreachable from the control node.
 
-## 💡 The Solution: Two-Phase Bootstrap
+## The Solution: Two-Phase Bootstrap
 To fix this, the firewall tasks are made **conditional**. They will only execute if Ansible is already routing its connection through a Tailscale `100.x.x.x` IP address.
 
 ### Phase A: Bootstrap (Public IP)
@@ -37,10 +37,9 @@ To fix this, the firewall tasks are made **conditional**. They will only execute
 
 ---
 
-## 🚀 Execution Guide (The "Nuke & Pave" Workflow)
+## Execution Guide (The "Nuke & Pave" Workflow)
 
 Whenever a server needs to be built or rebuilt, follow these exact steps:
-
 ### 1. Reset Local State
 Clear the old server's cryptographic footprint from the Ansible control node.
 ```bash
