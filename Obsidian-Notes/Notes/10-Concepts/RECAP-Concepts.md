@@ -53,12 +53,13 @@ Keycloak (Hub)
 **Un utilisateur = un seul satellite.** Son groupe Keycloak détermine où il est provisionné.
 
 **Les 4 fonctions IAM :**
-| Fonction | Qui fait quoi |
-|---|---|
-| **Authentication (AuthN)** | Keycloak vérifie *qui tu es* |
-| **Authorization (AuthZ)** | Cloudflare Access vérifie *ce que tu peux faire* |
-| **Provisioning** | n8n crée les comptes dans les satellites |
-| **Governance** | Wazuh + logs → qui a fait quoi |
+
+| Fonction                   | Qui fait quoi                                    |
+| -------------------------- | ------------------------------------------------ |
+| **Authentication (AuthN)** | Keycloak vérifie *qui tu es*                     |
+| **Authorization (AuthZ)**  | Cloudflare Access vérifie *ce que tu peux faire* |
+| **Provisioning**           | n8n crée les comptes dans les satellites         |
+| **Governance**             | Wazuh + logs → qui a fait quoi                   |
 
 → Fiche complète : [[IAM]]
 
@@ -82,6 +83,7 @@ Keycloak (Hub)
 ```
 
 **Les 3 tokens à retenir :**
+
 | Token | Contenu | Durée |
 |---|---|---|
 | **ID Token** | Qui tu es (JWT : sub, email, groups) | 1h |
@@ -101,6 +103,7 @@ Keycloak (Hub)
 - Dans ce projet : utilisé pour que Keycloak puisse parler à **Entra ID** (Microsoft)
 
 **Quand SAML vs OIDC :**
+
 | | SAML | OIDC |
 |---|---|---|
 | Format | XML signé | JWT (JSON) |
@@ -155,6 +158,7 @@ eyJhbGciOiJSUzI1NiJ9         ← Header  (algo de signature)
 - 4 flux principaux selon le contexte
 
 **Les flux :**
+
 | Flux | Quand l'utiliser | Dans ce projet |
 |---|---|---|
 | **Authorization Code** | Apps web avec backend | Cloudflare Access ↔ Keycloak |
@@ -180,6 +184,7 @@ n8n → appelle Graph API avec ce token
 - C'est ce que ton projet automatise avec n8n
 
 **Les 3 moments :**
+
 | Moment | Événement | Ce que n8n fait |
 |---|---|---|
 | **Joiner** (arrivée) | Utilisateur créé dans Keycloak | Crée le compte dans Google ou Entra |
@@ -207,6 +212,7 @@ n8n → appelle Graph API avec ce token
 - Risque : un compte admin compromis = tout le système compromis
 
 **Ce que tu implémentes :**
+
 | Mécanisme | Outil | Rôle |
 |---|---|---|
 | **LAPS** | Action1 + Entra | Mot de passe admin local unique par machine, rotation automatique |
@@ -248,6 +254,7 @@ GET  /Groups      → Synchroniser les groupes
 - C'est le modèle théorique derrière comment une décision d'accès est prise
 
 **Les 3 composants :**
+
 | Composant | Rôle | Dans ce projet |
 |---|---|---|
 | **PEP** (Policy Enforcement Point) | Le gardien — bloque ou laisse passer | **Cloudflare Access** |
