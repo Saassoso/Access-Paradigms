@@ -27,3 +27,32 @@ access-paradigms/
 ├── .gitignore                           # Ignore le dossier système .obsidian
 └── README.md
 ```
+---
+
+# Access Paradigms Notes (Obsidian Export)
+
+This section details the contents of the `Obsidian-Notes` directory, which contains a collection of notes, concepts, runbooks, and task-related documentation. These notes were originally maintained in Obsidian and have been refactored for public presentation on GitHub.
+
+The content is organized within the `Obsidian-Notes/docs` directory.
+
+## Structure
+
+The `docs` directory contains the following subdirectories:
+
+*   **00-Project**: General project-related documentation.
+*   **10-Concepts**: Core concepts and theoretical explanations.
+*   **20-Outils**: Tools and utilities documentation.
+*   **30-Runbooks**: Operational runbooks and procedures.
+*   **40-Journal**: Journal entries or time-based notes.
+*   **50-Tasks**: Task-specific notes.
+*   **99-Attachments**: Contains various attachments and media files linked within the notes.
+*   **Views**: Specific views or filtered sets of notes.
+*   **HOME.md**: A good starting point for navigating the notes.
+
+## Infrastructure
+
+The infrastructure for this project is managed in a separate repository: [charif-labs-infra](https://github.com/charif-labs-org/charif-labs-infra)
+
+## Usage
+
+To explore the notes, simply browse the `Obsidian-Notes/docs` directory. Start with `HOME.md` for an overview.
